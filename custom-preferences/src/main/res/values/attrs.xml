@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TimePickerPreference">
+        <attr name="tpp_useSimpleSummaryProvider" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="PredefinedColorPickerPreference">
+        <attr name="colors" format="reference" />
+        <attr name="pcpp_useSimpleSummaryProvider" format="boolean"/>
+    </declare-styleable>
+</resources>
