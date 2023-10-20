@@ -6,5 +6,6 @@
     <declare-styleable name="PredefinedColorPickerPreference">
         <attr name="colors" format="reference" />
         <attr name="pcpp_useSimpleSummaryProvider" format="boolean"/>
+        <attr name="tolerateForeignColors" format="boolean" />
     </declare-styleable>
 </resources>

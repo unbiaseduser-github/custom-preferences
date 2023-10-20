@@ -9,6 +9,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.annotation.ArrayRes
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.preference.Preference
@@ -17,7 +18,7 @@ import androidx.preference.PreferenceViewHolder
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.sixtyninefourtwenty.custompreferences.internal.useCompat
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class PredefinedColorPickerPreference : Preference {
 
     @SuppressLint("Recycle")
@@ -26,6 +27,7 @@ class PredefinedColorPickerPreference : Preference {
         context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference).useCompat {
             availableColors = initAvailableColors(it)
             initSummaryProvider(it)
+            tolerateForeignColor = initTolerateForeignColors(it)
         }
         widgetLayoutResource = R.layout.preference_widget_color_swatch
     }
@@ -35,6 +37,7 @@ class PredefinedColorPickerPreference : Preference {
         context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference, defStyleAttr, 0).useCompat {
             availableColors = initAvailableColors(it)
             initSummaryProvider(it)
+            tolerateForeignColor = initTolerateForeignColors(it)
         }
         widgetLayoutResource = R.layout.preference_widget_color_swatch
     }
@@ -44,6 +47,7 @@ class PredefinedColorPickerPreference : Preference {
         context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference, defStyleAttr, defStyleRes).useCompat {
             availableColors = initAvailableColors(it)
             initSummaryProvider(it)
+            tolerateForeignColor = initTolerateForeignColors(it)
         }
         widgetLayoutResource = R.layout.preference_widget_color_swatch
     }
@@ -57,13 +61,24 @@ class PredefinedColorPickerPreference : Preference {
         }
     }
 
+    private fun initTolerateForeignColors(typedArray: TypedArray) =
+        typedArray.getBoolean(R.styleable.PredefinedColorPickerPreference_tolerateForeignColors, true)
+
     private var colorWidget: ImageView? = null
     private var currentColor: Int = Color.BLACK
     private var availableColors: IntArray
+    private var tolerateForeignColor: Boolean
 
     fun setAvailableColorsArrayRes(@ArrayRes arrayRes: Int) {
-        availableColors = context.resources.getIntArray(arrayRes)
+        setAvailableColors(context.resources.getIntArray(arrayRes))
     }
+
+    fun setAvailableColors(@ColorInt colors: IntArray) {
+        checkForeignColorIfEnabled(currentColor, colors)
+        this.availableColors = colors
+    }
+
+    fun copyOfAvailableColors() = availableColors.clone()
 
     @SuppressLint("ResourceType")
     override fun onClick() {
@@ -101,10 +116,20 @@ class PredefinedColorPickerPreference : Preference {
     }
 
     private fun setColor(color: Int) {
+        checkForeignColorIfEnabled(color)
         currentColor = color
         persistInt(color)
         setColorOnWidget(color)
         notifyChanged()
+    }
+
+    private fun checkForeignColorIfEnabled(color: Int, colors: IntArray = availableColors) {
+        fun formatColor(color: Int) = "#${color.toString(16)}"
+        fun formatColorArray(colorArray: IntArray) = colorArray.joinToString(transform = ::formatColor)
+
+        if (!tolerateForeignColor) {
+            check(color in colors) { "tolerateForeignColor is disabled and ${formatColor(color)} is not part of ${formatColorArray(availableColors)}" }
+        }
     }
 
     override fun onGetDefaultValue(a: TypedArray, index: Int): Any? {
