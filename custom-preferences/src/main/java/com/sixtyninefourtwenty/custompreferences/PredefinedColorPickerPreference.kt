@@ -115,7 +115,7 @@ class PredefinedColorPickerPreference : Preference {
         }
     }
 
-    private fun setColor(color: Int) {
+    fun setColor(color: Int) {
         checkForeignColorIfEnabled(color)
         currentColor = color
         persistInt(color)
