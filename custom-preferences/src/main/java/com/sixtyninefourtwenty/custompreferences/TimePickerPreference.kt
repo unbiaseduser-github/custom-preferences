@@ -39,11 +39,9 @@ class TimePickerPreference : AbstractCustomDialogPreference {
 
     var time: LocalTime? = null
         set(value) {
-            if (callChangeListener(value)) {
-                field = value
-                persistString(value?.let(timeFormatPattern::format))
-                notifyChanged()
-            }
+            field = value
+            persistString(value?.let(timeFormatPattern::format))
+            notifyChanged()
         }
 
     override fun createDialog(): DialogFragment {
@@ -54,7 +52,10 @@ class TimePickerPreference : AbstractCustomDialogPreference {
             .build()
             .apply {
                 addOnPositiveButtonClickListener {
-                    time = LocalTime.of(hour, minute)
+                    val newTime = LocalTime.of(hour, minute)
+                    if (callChangeListener(newTime)) {
+                        time = newTime
+                    }
                 }
             }
     }

@@ -65,8 +65,14 @@ class PredefinedColorPickerPreference : Preference {
         typedArray.getBoolean(R.styleable.PredefinedColorPickerPreference_tolerateForeignColors, true)
 
     private var colorWidget: ImageView? = null
-    var currentColor: Int = Color.BLACK
-        private set
+    var color: Int = Color.BLACK
+        set(value) {
+            checkForeignColorIfEnabled(value)
+            field = value
+            persistInt(value)
+            setColorOnWidget(value)
+            notifyChanged()
+        }
     private var availableColors: IntArray
     var tolerateForeignColor: Boolean
 
@@ -75,7 +81,7 @@ class PredefinedColorPickerPreference : Preference {
     }
 
     fun setAvailableColors(@ColorInt colors: IntArray) {
-        checkForeignColorIfEnabled(currentColor, colors)
+        checkForeignColorIfEnabled(color, colors)
         this.availableColors = colors
     }
 
@@ -92,10 +98,10 @@ class PredefinedColorPickerPreference : Preference {
                 }
             }
             .setColorRes(availableColors)
-            .setDefaultColor(currentColor)
+            .setDefaultColor(color)
             .setColorListener { color, _ ->
                 if (callChangeListener(color)) {
-                    setColor(color)
+                    this.color = color
                 }
             }
             .show()
@@ -104,7 +110,7 @@ class PredefinedColorPickerPreference : Preference {
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         colorWidget = holder.findViewById(R.id.color_picker_widget) as ImageView
-        setColorOnWidget(currentColor)
+        setColorOnWidget(color)
     }
 
     private fun setColorOnWidget(color: Int) {
@@ -114,14 +120,6 @@ class PredefinedColorPickerPreference : Preference {
             drawable?.setTint(color)
             widget.setImageDrawable(drawable)
         }
-    }
-
-    fun setColor(color: Int) {
-        checkForeignColorIfEnabled(color)
-        currentColor = color
-        persistInt(color)
-        setColorOnWidget(color)
-        notifyChanged()
     }
 
     private fun checkForeignColorIfEnabled(color: Int, colors: IntArray = availableColors) {
@@ -139,7 +137,7 @@ class PredefinedColorPickerPreference : Preference {
 
     override fun onSetInitialValue(defaultValue: Any?) {
         val value = defaultValue as String?
-        setColor(getPersistedInt(if (value.isNullOrBlank()) Color.BLACK else value.toColorInt()))
+        color = getPersistedInt(if (value.isNullOrBlank()) Color.BLACK else value.toColorInt())
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -148,7 +146,7 @@ class PredefinedColorPickerPreference : Preference {
             return superState
         }
         return SavedState(superState).apply {
-            color = currentColor
+            color = this@PredefinedColorPickerPreference.color
         }
     }
 
@@ -157,7 +155,7 @@ class PredefinedColorPickerPreference : Preference {
             super.onRestoreInstanceState(state)
         } else {
             super.onRestoreInstanceState(state.superState)
-            setColor(state.color)
+            color = state.color
         }
     }
 
@@ -190,7 +188,7 @@ class PredefinedColorPickerPreference : Preference {
         fun getSimpleSummaryProvider() = SUMMARY_PROVIDER
         val SUMMARY_PROVIDER by lazy {
             SummaryProvider<PredefinedColorPickerPreference> {
-                "#${Integer.toHexString(it.currentColor)}"
+                "#${Integer.toHexString(it.color)}"
             }
         }
     }
