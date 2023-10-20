@@ -65,9 +65,10 @@ class PredefinedColorPickerPreference : Preference {
         typedArray.getBoolean(R.styleable.PredefinedColorPickerPreference_tolerateForeignColors, true)
 
     private var colorWidget: ImageView? = null
-    private var currentColor: Int = Color.BLACK
+    var currentColor: Int = Color.BLACK
+        private set
     private var availableColors: IntArray
-    private var tolerateForeignColor: Boolean
+    var tolerateForeignColor: Boolean
 
     fun setAvailableColorsArrayRes(@ArrayRes arrayRes: Int) {
         setAvailableColors(context.resources.getIntArray(arrayRes))
