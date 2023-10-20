@@ -1,6 +1,5 @@
 package com.sixtyninefourtwenty.custompreferences
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.TypedArray
@@ -120,6 +119,8 @@ class TimePickerPreference : AbstractCustomDialogPreference {
     }
 
     companion object {
+        @JvmStatic
+        fun getSimpleSummaryProvider() = mySummaryProvider
         fun getPersistedLocalTime(preferences: SharedPreferences, key: String): LocalTime? = preferences.getString(key, null)?.let { LocalTime.parse(it, timeFormatPattern) }
         private val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
         private val timeFormatPattern12h: DateTimeFormatter = DateTimeFormatter.ofPattern("KK:mm a")

@@ -186,6 +186,8 @@ class PredefinedColorPickerPreference : Preference {
     }
 
     companion object {
+        @JvmStatic
+        fun getSimpleSummaryProvider() = SUMMARY_PROVIDER
         val SUMMARY_PROVIDER by lazy {
             SummaryProvider<PredefinedColorPickerPreference> {
                 "#${Integer.toHexString(it.currentColor)}"
