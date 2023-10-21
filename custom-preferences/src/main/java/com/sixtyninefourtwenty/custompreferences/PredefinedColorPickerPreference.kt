@@ -19,7 +19,7 @@ import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.sixtyninefourtwenty.custompreferences.internal.useCompat
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class PredefinedColorPickerPreference : Preference {
+open class PredefinedColorPickerPreference : Preference {
 
     @SuppressLint("Recycle")
     @JvmOverloads

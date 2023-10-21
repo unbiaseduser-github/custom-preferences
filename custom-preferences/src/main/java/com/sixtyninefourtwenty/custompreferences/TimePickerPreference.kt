@@ -15,7 +15,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("unused")
-class TimePickerPreference : AbstractCustomDialogPreference {
+open class TimePickerPreference : AbstractCustomDialogPreference {
 
     @JvmOverloads
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
