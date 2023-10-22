@@ -18,6 +18,11 @@ import androidx.preference.PreferenceViewHolder
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.sixtyninefourtwenty.custompreferences.internal.useCompat
 
+/**
+ * A [Preference] that shows a [MaterialColorPickerDialog]. This preference saves an int value.
+ *
+ * Default value: A String that can be processed by [Color.parseColor].
+ */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 open class PredefinedColorPickerPreference : Preference {
 

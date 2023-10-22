@@ -6,7 +6,15 @@ import android.util.AttributeSet
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.DialogPreference
+import androidx.preference.PreferenceFragmentCompat
 
+/**
+ * Base class for all preferences that display a [DialogFragment]. The difference between this and
+ * [DialogPreference] is that the library will apply behavior to the fragment to match that of
+ * [PreferenceFragmentCompat.onDisplayPreferenceDialog] and the stock `...DialogFragmentCompat` classes.
+ * The library will take care of showing the dialog for you if your preference fragment extends
+ * [PreferenceFragmentCompatAccommodateCustomDialogPreferences].
+ */
 @Suppress("unused")
 abstract class AbstractCustomDialogPreference : DialogPreference {
 

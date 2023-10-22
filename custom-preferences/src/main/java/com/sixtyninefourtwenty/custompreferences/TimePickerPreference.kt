@@ -9,11 +9,23 @@ import android.text.format.DateFormat
 import android.util.AttributeSet
 import androidx.core.os.ParcelCompat
 import androidx.fragment.app.DialogFragment
+import androidx.preference.DialogPreference
 import androidx.preference.Preference.SummaryProvider
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * A [DialogPreference] that shows a [MaterialTimePicker]. This preference saves a String value,
+ * but its public API gives access to a [LocalTime] that's parsed from the underlying String.
+ *
+ * Default value: A String representing a time in format `HH:mm`. For more information see
+ * [DateTimeFormatter], section "Patterns for Formatting and Parsing".
+ *
+ * **Note**: Due to the nature of the picker,
+ * [androidx.preference.R.styleable.DialogPreference_dialogMessage] and
+ * [setDialogMessage] have no effect.
+ */
 @Suppress("unused")
 open class TimePickerPreference : AbstractCustomDialogPreference {
 
