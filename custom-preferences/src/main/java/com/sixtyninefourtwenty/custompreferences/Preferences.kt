@@ -22,11 +22,20 @@ fun SharedPreferences.getLocalTimeOrNull(key: String): LocalTime? =
 fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime?): SharedPreferences.Editor =
     putString(key, value?.let { TimePickerPreference.timeFormatPattern.format(it) })
 
+/**
+ * @see SharedPreferences.getLocalTime
+ */
 fun PreferenceDataStore.getLocalTime(key: String, defValue: LocalTime): LocalTime =
     getLocalTimeOrNull(key) ?: defValue
 
+/**
+ * @see SharedPreferences.getLocalTimeOrNull
+ */
 fun PreferenceDataStore.getLocalTimeOrNull(key: String): LocalTime? =
     getString(key, null)?.let { LocalTime.parse(it, TimePickerPreference.timeFormatPattern) }
 
+/**
+ * @see SharedPreferences.Editor.putLocalTime
+ */
 fun PreferenceDataStore.putLocalTime(key: String, value: LocalTime?) =
     putString(key, value?.let { TimePickerPreference.timeFormatPattern.format(it) })

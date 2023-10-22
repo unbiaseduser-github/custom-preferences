@@ -11,6 +11,7 @@ import androidx.core.os.ParcelCompat
 import androidx.fragment.app.DialogFragment
 import androidx.preference.DialogPreference
 import androidx.preference.Preference.SummaryProvider
+import androidx.preference.PreferenceDataStore
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -18,6 +19,9 @@ import java.time.format.DateTimeFormatter
 /**
  * A [DialogPreference] that shows a [MaterialTimePicker]. This preference saves a String value,
  * but its public API gives access to a [LocalTime] that's parsed from the underlying String.
+ * To access the parsed time from [SharedPreferences] or [PreferenceDataStore], use
+ * [SharedPreferences.getLocalTime] or [PreferenceDataStore.getLocalTime]. You can also set time
+ * with [SharedPreferences.Editor.putLocalTime] or [PreferenceDataStore.putLocalTime].
  *
  * Default value: A String representing a time in format `HH:mm`. For more information see
  * [DateTimeFormatter], section "Patterns for Formatting and Parsing".
