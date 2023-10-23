@@ -31,7 +31,7 @@ import java.time.format.DateTimeFormatter
  * [setDialogMessage] have no effect.
  */
 @Suppress("unused")
-open class TimePickerPreference : AbstractCustomDialogPreference {
+open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferenceChangeListener<LocalTime> {
 
     @JvmOverloads
     constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
@@ -44,6 +44,10 @@ open class TimePickerPreference : AbstractCustomDialogPreference {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         init(context.obtainStyledAttributes(attrs, R.styleable.TimePickerPreference, defStyleAttr, defStyleRes))
+    }
+
+    override fun setOnPreferenceChange(block: ((newValue: LocalTime) -> Boolean)?) {
+        setTypedPreferenceChangeListener(block)
     }
 
     private fun init(typedArray: TypedArray) {

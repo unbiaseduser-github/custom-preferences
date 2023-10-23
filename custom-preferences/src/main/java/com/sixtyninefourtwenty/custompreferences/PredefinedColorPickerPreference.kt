@@ -24,7 +24,7 @@ import com.sixtyninefourtwenty.custompreferences.internal.useCompat
  * Default value: A String that can be processed by [Color.parseColor].
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-open class PredefinedColorPickerPreference : Preference {
+open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeListener<Int> {
 
     @SuppressLint("Recycle")
     @JvmOverloads
@@ -55,6 +55,10 @@ open class PredefinedColorPickerPreference : Preference {
             tolerateForeignColor = initTolerateForeignColors(it)
         }
         widgetLayoutResource = R.layout.preference_widget_color_swatch
+    }
+
+    override fun setOnPreferenceChange(block: ((newValue: Int) -> Boolean)?) {
+        setTypedPreferenceChangeListener(block)
     }
 
     private fun initAvailableColors(typedArray: TypedArray) =
