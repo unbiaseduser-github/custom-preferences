@@ -1,5 +1,6 @@
 package com.sixtyninefourtwenty.custompreferences
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
@@ -7,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.DialogPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback
 
 /**
  * Base class for all preferences that display a [DialogFragment]. The difference between this and
@@ -27,11 +29,49 @@ abstract class AbstractCustomDialogPreference : DialogPreference {
 
     protected abstract fun createDialog(): DialogFragment
 
-    //do some stuff that PreferenceFragmentCompat.onDisplayPreferenceDialog does. is it really needed? eh
-    fun displayDialog(fragment: Fragment) = createDialog().apply {
-        @Suppress("DEPRECATION")
-        setTargetFragment(fragment, 0)
-        arguments = Bundle(arguments ?: Bundle()).apply { putString("key", key) }
-    }.show(fragment.parentFragmentManager, "androidx.preference.PreferenceFragment.DIALOG")
+    @SuppressLint("RestrictedApi")
+    fun displayDialog(fragment: PreferenceFragmentCompat) {
+        var handled = false
+        val cb1 = fragment.callbackFragment
+        if (cb1 is OnPreferenceDisplayDialogCallback) {
+            handled = cb1.onPreferenceDisplayDialog(fragment, this)
+        }
+
+        var cb2: Fragment? = fragment
+        while (!handled && cb2 != null) {
+            if (cb2 is OnPreferenceDisplayDialogCallback) {
+                handled = cb2.onPreferenceDisplayDialog(fragment, this)
+            }
+            cb2 = cb2.parentFragment
+        }
+
+        val context = fragment.context
+        if (!handled && context is OnPreferenceDisplayDialogCallback) {
+            handled = context.onPreferenceDisplayDialog(fragment, this)
+        }
+
+        val activity = fragment.activity
+        if (!handled && activity is OnPreferenceDisplayDialogCallback) {
+            handled = activity.onPreferenceDisplayDialog(fragment, this)
+        }
+
+        if (handled) {
+            return
+        }
+
+        if (fragment.parentFragmentManager.findFragmentByTag(TAG) != null) {
+            return
+        }
+
+        createDialog().apply {
+            @Suppress("DEPRECATION")
+            setTargetFragment(fragment, 0)
+            Bundle.EMPTY
+            arguments = Bundle(arguments ?: Bundle()).apply { putString("key", key) }
+        }.show(fragment.parentFragmentManager, TAG)
+    }
 
 }
+
+//No need to use preference library's tag.
+private const val TAG = "CUSTOM_PREFERENCE_DIALOG"
