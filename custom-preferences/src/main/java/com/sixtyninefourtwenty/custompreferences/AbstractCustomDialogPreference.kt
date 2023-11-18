@@ -66,8 +66,7 @@ abstract class AbstractCustomDialogPreference : DialogPreference {
         createDialog().apply {
             @Suppress("DEPRECATION")
             setTargetFragment(fragment, 0)
-            Bundle.EMPTY
-            arguments = Bundle(arguments ?: Bundle()).apply { putString("key", key) }
+            arguments = Bundle(arguments ?: Bundle.EMPTY).apply { putString("key", key) }
         }.show(fragment.parentFragmentManager, TAG)
     }
 
