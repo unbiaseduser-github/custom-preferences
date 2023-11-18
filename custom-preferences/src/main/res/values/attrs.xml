@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="CustomPreferenceTheme">
+        <attr name="preferenceCustomViewUnderneathStyle" format="reference"/>
+        <attr name="preferenceScrollableCustomViewUnderneathStyle" format="reference"/>
+        <attr name="abstractToggleGroupPreferenceStyle" format="reference"/>
+        <attr name="sliderPreferenceStyle" format="reference"/>
+    </declare-styleable>
     <declare-styleable name="TimePickerPreference">
         <attr name="tpp_useSimpleSummaryProvider" format="boolean"/>
     </declare-styleable>
@@ -7,5 +13,23 @@
         <attr name="colors" format="reference" />
         <attr name="pcpp_useSimpleSummaryProvider" format="boolean"/>
         <attr name="tolerateForeignColors" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="ToggleGroupPreference">
+        <attr name="tgp_entries" format="reference"/>
+        <attr name="tgp_entryValues" format="reference"/>
+        <attr name="tgp_icons" format="reference"/>
+        <attr name="tgp_useSimpleSummaryProvider" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="MultiSelectToggleGroupPreference">
+        <attr name="mstgp_entries" format="reference"/>
+        <attr name="mstgp_entryValues" format="reference"/>
+        <attr name="mstgp_icons" format="reference"/>
+    </declare-styleable>
+    <declare-styleable name="SliderPreference">
+        <attr name="sp_valueFrom" format="float"/>
+        <attr name="sp_valueTo" format="float"/>
+        <attr name="sp_stepSize" format="float"/>
+        <attr name="sp_tickVisible" format="boolean"/>
+        <attr name="sp_labelVisible" format="boolean"/>
     </declare-styleable>
 </resources>

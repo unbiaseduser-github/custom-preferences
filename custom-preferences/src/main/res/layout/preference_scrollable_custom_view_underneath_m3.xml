@@ -1,0 +1,84 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:focusable="true">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:clipToPadding="false"
+        android:baselineAligned="false">
+
+        <FrameLayout
+            android:id="@+id/icon_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="56dp"
+            android:paddingStart="0dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp">
+
+            <ImageView
+                android:id="@android:id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:maxWidth="48dp"
+                android:maxHeight="48dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@android:id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:ellipsize="marquee"
+                tools:text="@tools:sample/lorem[10]" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@android:id/summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@android:id/title"
+                android:layout_alignLeft="@android:id/title"
+                android:layout_alignStart="@android:id/title"
+                android:layout_gravity="start"
+                android:textAlignment="viewStart"
+                android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+                android:maxLines="10"
+                tools:text="@tools:sample/lorem[10]" />
+
+            <include
+                android:id="@android:id/widget_frame"
+                layout="@layout/horizontal_scroll_view_widget_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@android:id/summary"
+                android:layout_alignStart="@android:id/title"
+                android:layout_alignLeft="@android:id/title"
+                android:layout_marginTop="6dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"/>
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</FrameLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Preference.CustomViewUnderneath.Material2" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_custom_view_underneath_m2</item>
+    </style>
+    <style name="Preference.CustomViewUnderneath.Material3" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_custom_view_underneath_m3</item>
+    </style>
+    <style name="Preference.ScrollableCustomViewUnderneath.Material2" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_scrollable_custom_view_underneath_m2</item>
+    </style>
+    <style name="Preference.ScrollableCustomViewUnderneath.Material3" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_scrollable_custom_view_underneath_m3</item>
+    </style>
+    <style name="Preference.AbstractToggleGroup.Material2" parent="Preference.ScrollableCustomViewUnderneath.Material2">
+        <item name="android:widgetLayout">@layout/toggle_group_preference_widget</item>
+    </style>
+    <style name="Preference.AbstractToggleGroup.Material3" parent="Preference.ScrollableCustomViewUnderneath.Material3">
+        <item name="android:widgetLayout">@layout/toggle_group_preference_widget</item>
+    </style>
+    <style name="Preference.SliderPreference.Material2" parent="Preference.CustomViewUnderneath.Material2">
+        <item name="android:widgetLayout">@layout/slider_preference_widget</item>
+    </style>
+    <style name="Preference.SliderPreference.Material3" parent="Preference.CustomViewUnderneath.Material3">
+        <item name="android:widgetLayout">@layout/slider_preference_widget</item>
+    </style>
+</resources>
