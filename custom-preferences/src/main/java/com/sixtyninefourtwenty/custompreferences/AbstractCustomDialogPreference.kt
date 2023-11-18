@@ -73,5 +73,4 @@ abstract class AbstractCustomDialogPreference : DialogPreference {
 
 }
 
-//No need to use preference library's tag.
-private const val TAG = "CUSTOM_PREFERENCE_DIALOG"
+private const val TAG = "androidx.preference.PreferenceFragment.DIALOG"
