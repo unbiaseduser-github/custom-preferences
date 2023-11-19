@@ -11,58 +11,37 @@ import android.widget.ImageView
 import androidx.annotation.ArrayRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.TypedArrayUtils
 import androidx.core.graphics.toColorInt
+import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
-import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
-import com.sixtyninefourtwenty.custompreferences.internal.useCompat
+import com.github.dhaval2404.colorpicker.MaterialColorPicker
 
 /**
- * A [Preference] that shows a [MaterialColorPickerDialog]. This preference saves an int value.
+ * A [Preference] that shows a [MaterialColorPicker]. This preference saves an int value.
+ *
+ * Style attribute: [R.attr.predefinedColorPickerPreferenceStyle], default
+ * [R.style.Preference_PredefinedColorPicker]
  *
  * Default value: A String that can be processed by [Color.parseColor].
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeListener<Int> {
-
-    @SuppressLint("Recycle")
-    @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
-        context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference).useCompat {
-            availableColors = initAvailableColors(it)
-            initSummaryProvider(it)
-            tolerateForeignColor = initTolerateForeignColors(it)
-        }
-        widgetLayoutResource = R.layout.preference_widget_color_swatch
-    }
-
-    @SuppressLint("Recycle")
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference, defStyleAttr, 0).useCompat {
-            availableColors = initAvailableColors(it)
-            initSummaryProvider(it)
-            tolerateForeignColor = initTolerateForeignColors(it)
-        }
-        widgetLayoutResource = R.layout.preference_widget_color_swatch
-    }
-
-    @SuppressLint("Recycle")
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference, defStyleAttr, defStyleRes).useCompat {
-            availableColors = initAvailableColors(it)
-            initSummaryProvider(it)
-            tolerateForeignColor = initTolerateForeignColors(it)
-        }
-        widgetLayoutResource = R.layout.preference_widget_color_swatch
-    }
+open class PredefinedColorPickerPreference @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    @SuppressLint("RestrictedApi")
+    defStyleAttr: Int = TypedArrayUtils.getAttr(context, R.attr.predefinedColorPickerPreferenceStyle, 0),
+    defStyleRes: Int = R.style.Preference_PredefinedColorPicker
+) : AbstractCustomDialogPreference(context, attrs, defStyleAttr, defStyleRes), CanSetPreferenceChangeListener<Int> {
 
     override fun setOnPreferenceChange(block: ((newValue: Int) -> Boolean)?) {
         setTypedPreferenceChangeListener(block)
     }
 
     private fun initAvailableColors(typedArray: TypedArray) =
-        context.resources.getIntArray(typedArray.getResourceId(R.styleable.PredefinedColorPickerPreference_colors, R.array.color_picker_default_colors))
+        context.resources.getIntArray(typedArray.getResourceId(R.styleable.PredefinedColorPickerPreference_pcpp_colors, R.array.color_picker_default_colors))
 
     private fun initSummaryProvider(typedArray: TypedArray) {
         if (typedArray.getBoolean(R.styleable.PredefinedColorPickerPreference_pcpp_useSimpleSummaryProvider, false)) {
@@ -70,73 +49,64 @@ open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeL
         }
     }
 
-    private fun initTolerateForeignColors(typedArray: TypedArray) =
-        typedArray.getBoolean(R.styleable.PredefinedColorPickerPreference_tolerateForeignColors, true)
-
-    private var colorWidget: ImageView? = null
-    var color: Int = Color.BLACK
+    var color: Int? = null
         set(value) {
-            checkForeignColorIfEnabled(value)
             field = value
-            persistInt(value)
-            setColorOnWidget(value)
+            persistInt(value ?: Int.MIN_VALUE)
             notifyChanged()
         }
+
+    @ColorInt
     private var availableColors: IntArray
-    var tolerateForeignColor: Boolean
+
+    init {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.PredefinedColorPickerPreference)
+        availableColors = initAvailableColors(typedArray)
+        initSummaryProvider(typedArray)
+        typedArray.recycle()
+    }
 
     fun setAvailableColorsArrayRes(@ArrayRes arrayRes: Int) {
         setAvailableColors(context.resources.getIntArray(arrayRes))
     }
 
     fun setAvailableColors(@ColorInt colors: IntArray) {
-        checkForeignColorIfEnabled(color, colors)
         this.availableColors = colors
     }
 
     fun copyOfAvailableColors() = availableColors.clone()
 
-    @SuppressLint("ResourceType")
-    override fun onClick() {
-        super.onClick()
-        MaterialColorPickerDialog.Builder(context)
+    override fun createDialog(): DialogFragment {
+        return MaterialColorPicker.Builder(context)
             .also {
-                val prefTitle = title
-                if (prefTitle != null) {
-                    it.setTitle(prefTitle.toString())
+                val prefDialogTitle = dialogTitle
+                if (prefDialogTitle != null) {
+                    it.setTitle(prefDialogTitle.toString())
                 }
             }
             .setColorRes(availableColors)
-            .setDefaultColor(color)
+            .also {
+                val prefColor = color
+                if (prefColor != null) {
+                    it.setDefaultColor(prefColor)
+                }
+            }
             .setColorListener { color, _ ->
                 if (callChangeListener(color)) {
                     this.color = color
                 }
             }
-            .show()
+            .build()
+            .createDialog()
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        colorWidget = holder.findViewById(R.id.color_picker_widget) as ImageView
-        setColorOnWidget(color)
-    }
-
-    private fun setColorOnWidget(color: Int) {
-        val widget = colorWidget
-        if (widget != null) {
-            val drawable = ContextCompat.getDrawable(context, R.drawable.colorpicker_pref_swatch)
-            drawable?.setTint(color)
-            widget.setImageDrawable(drawable)
-        }
-    }
-
-    private fun checkForeignColorIfEnabled(color: Int, colors: IntArray = availableColors) {
-        fun formatColor(color: Int) = "#${color.toString(16)}"
-        fun formatColorArray(colorArray: IntArray) = colorArray.joinToString(transform = ::formatColor)
-
-        if (!tolerateForeignColor) {
-            check(color in colors) { "tolerateForeignColor is disabled and ${formatColor(color)} is not part of ${formatColorArray(availableColors)}" }
+        with(holder.findViewById(R.id.color_picker_widget) as ImageView) {
+            val drawable = ContextCompat.getDrawable(context, R.drawable.colorpicker_pref_swatch)?.mutate()?.apply {
+                setTint(color ?: Color.TRANSPARENT)
+            }
+            setImageDrawable(drawable)
         }
     }
 
@@ -146,7 +116,8 @@ open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeL
 
     override fun onSetInitialValue(defaultValue: Any?) {
         val value = defaultValue as String?
-        color = getPersistedInt(if (value.isNullOrBlank()) Color.BLACK else value.toColorInt())
+        color = getPersistedInt(if (value.isNullOrBlank()) Int.MIN_VALUE else value.toColorInt())
+            .takeIf { it != Int.MIN_VALUE }
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -154,8 +125,9 @@ open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeL
         if (isPersistent) {
             return superState
         }
-        return SavedState(superState).apply {
-            color = this@PredefinedColorPickerPreference.color
+        return SavedState(superState).also {
+            it.color = this.color
+            it.availableColors = this.availableColors
         }
     }
 
@@ -165,22 +137,28 @@ open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeL
         } else {
             super.onRestoreInstanceState(state.superState)
             color = state.color
+            availableColors = state.availableColors
         }
     }
 
     private class SavedState : BaseSavedState {
 
-        var color: Int = Color.BLACK
+        var color: Int? = null
+        lateinit var availableColors: IntArray
 
         constructor(source: Parcel) : super(source) {
-            color = source.readInt()
+            color = source.readInt().takeIf { it != Int.MIN_VALUE }
+            availableColors = source.createIntArray()!!
         }
 
         constructor(superState: Parcelable?) : super(superState)
 
         override fun writeToParcel(dest: Parcel, flags: Int) {
             super.writeToParcel(dest, flags)
-            dest.writeInt(color)
+            with(dest) {
+                writeInt(color ?: Int.MIN_VALUE)
+                writeIntArray(availableColors)
+            }
         }
 
         companion object CREATOR : Parcelable.Creator<SavedState> {
@@ -197,7 +175,12 @@ open class PredefinedColorPickerPreference : Preference, CanSetPreferenceChangeL
         fun getSimpleSummaryProvider() = SUMMARY_PROVIDER
         val SUMMARY_PROVIDER by lazy {
             SummaryProvider<PredefinedColorPickerPreference> {
-                "#${Integer.toHexString(it.color)}"
+                val prefColor = it.color
+                if (prefColor != null) {
+                    "#${Integer.toHexString(prefColor)}"
+                } else {
+                    it.context.getString(androidx.preference.R.string.not_set)
+                }
             }
         }
     }

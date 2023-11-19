@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CustomPreferenceTheme">
+        <attr name="predefinedColorPickerPreferenceStyle" format="reference"/>
         <attr name="preferenceCustomViewUnderneathStyle" format="reference"/>
         <attr name="preferenceScrollableCustomViewUnderneathStyle" format="reference"/>
         <attr name="abstractToggleGroupPreferenceStyle" format="reference"/>
@@ -10,9 +11,8 @@
         <attr name="tpp_useSimpleSummaryProvider" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="PredefinedColorPickerPreference">
-        <attr name="colors" format="reference" />
+        <attr name="pcpp_colors" format="reference" />
         <attr name="pcpp_useSimpleSummaryProvider" format="boolean"/>
-        <attr name="tolerateForeignColors" format="boolean" />
     </declare-styleable>
     <declare-styleable name="ToggleGroupPreference">
         <attr name="tgp_entries" format="reference"/>

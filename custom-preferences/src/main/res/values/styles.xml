@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Preference.PredefinedColorPicker" parent="Preference.Material">
+        <item name="android:widgetLayout">@layout/preference_widget_color_swatch</item>
+    </style>
     <style name="Preference.CustomViewUnderneath.Material2" parent="Preference.Material">
         <item name="android:layout">@layout/preference_custom_view_underneath_m2</item>
     </style>
