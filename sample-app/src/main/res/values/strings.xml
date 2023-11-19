@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Custom Preferences Sample App</string>
+    <string name="value">Value: %s</string>
+</resources>

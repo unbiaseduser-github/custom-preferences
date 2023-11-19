@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "custom-preferences"
 include(":custom-preferences")
+include(":sample-app")

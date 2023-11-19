@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/custom-preferences" />
+            <option value="$PROJECT_DIR$/sample-app" />
           </set>
         </option>
       </GradleProjectSettings>
