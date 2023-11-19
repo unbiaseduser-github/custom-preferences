@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
@@ -104,7 +106,7 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
         super.onBindViewHolder(holder)
         with(holder.findViewById(R.id.color_picker_widget) as ImageView) {
             val drawable = ContextCompat.getDrawable(context, R.drawable.colorpicker_pref_swatch)?.mutate()?.apply {
-                setTint(color ?: Color.TRANSPARENT)
+                colorFilter = PorterDuffColorFilter(color ?: Color.TRANSPARENT, PorterDuff.Mode.SRC_OVER)
             }
             setImageDrawable(drawable)
         }
