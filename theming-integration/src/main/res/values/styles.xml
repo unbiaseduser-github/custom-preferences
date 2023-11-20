@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.Material2.WithCustomPreferences" parent="AppTheme.Material2">
+        <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material2</item>
+        <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material2</item>
+        <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material2</item>
+        <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material2</item>
+    </style>
+    <style name="AppTheme.Material2.Fallback.WithCustomPreferences" parent="AppTheme.Material2.Fallback">
+        <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material2</item>
+        <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material2</item>
+        <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material2</item>
+        <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material2</item>
+    </style>
+    <style name="AppTheme.Material3.CustomColors.WithCustomPreferences" parent="AppTheme.Material3.CustomColors">
+        <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
+        <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
+        <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>
+        <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material3</item>
+    </style>
+    <style name="AppTheme.Material3.DynamicColors.WithCustomPreferences" parent="AppTheme.Material3.DynamicColors">
+        <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
+        <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
+        <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>
+        <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material3</item>
+    </style>
+    <style name="AppTheme.Material3.Fallback.WithCustomPreferences" parent="AppTheme.Material3.Fallback">
+        <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
+        <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
+        <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>
+        <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material3</item>
+    </style>
+</resources>
