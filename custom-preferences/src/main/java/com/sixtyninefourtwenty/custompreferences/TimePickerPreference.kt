@@ -142,14 +142,6 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
     companion object {
         @JvmStatic
         fun getSimpleSummaryProvider() = mySummaryProvider
-        @Deprecated(
-            message = "This method isn't very idiomatic",
-            replaceWith = ReplaceWith(
-                expression = "SharedPreferences.getLocalTime",
-                imports = ["com.sixtyninefourtwenty.custompreferences.getLocalTime"]
-            )
-        )
-        fun getPersistedLocalTime(preferences: SharedPreferences, key: String): LocalTime? = preferences.getString(key, null)?.let { LocalTime.parse(it, timeFormatPattern) }
         @get:JvmSynthetic
         internal val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
         private val timeFormatPattern12h: DateTimeFormatter = DateTimeFormatter.ofPattern("KK:mm a")
