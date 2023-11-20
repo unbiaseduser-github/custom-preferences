@@ -83,7 +83,6 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
         entryValues: Array<CharSequence>?,
         toggleGroup: MaterialButtonToggleGroup
     ) {
-        //toggleGroup.removeOnButtonCheckedListener(buttonCheckedListener)
         if (value == null || entryValues == null) {
             toggleGroup.clearChecked()
         } else {
@@ -94,38 +93,11 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
                 toggleGroup.clearChecked()
             }
         }
-        //toggleGroup.addOnButtonCheckedListener(buttonCheckedListener)
     }
-
-    /* For some reason when I use a MaterialButtonToggleGroup.OnButtonCheckedListener it always
-    gets called even when I previously removed it from the MaterialButtonToggleGroup.
-    private val buttonCheckedListener = object : MaterialButtonToggleGroup.OnButtonCheckedListener {
-        override fun onButtonChecked(
-            group: MaterialButtonToggleGroup,
-            checkedId: Int,
-            isChecked: Boolean
-        ) {
-            group.removeOnButtonCheckedListener(this)
-            val index = group.indexOfChild(group.children.first { it.id == checkedId })
-            val strEntryValue = entryValues!![index].toString()
-            if (callChangeListener(strEntryValue)) {
-                value = strEntryValue
-            } else {
-                val oldButtonIndex = value?.let { entryValues!!.indexOf(it) } ?: -1
-                if (oldButtonIndex >= 0) {
-                    group.check(group[oldButtonIndex].id)
-                } else {
-                    group.clearChecked()
-                }
-            }
-            group.addOnButtonCheckedListener(this)
-        }
-    }*/
 
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
         val entryValues = copyOfEntryValues()
         setValueOnToggleGroup(value, entryValues, toggleGroup)
-        //toggleGroup.addOnButtonCheckedListener(buttonCheckedListener)
         if (entryValues != null) {
             toggleGroup.children.forEachIndexed { index, view ->
                 view.setOnClickListener {
