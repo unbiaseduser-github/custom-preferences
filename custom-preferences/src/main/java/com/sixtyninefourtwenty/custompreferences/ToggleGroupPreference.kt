@@ -11,6 +11,7 @@ import androidx.core.view.children
 import androidx.core.view.get
 import androidx.preference.Preference
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 
 /**
  * [AbstractToggleGroupPreference] that allows users to select a single option. This preference
@@ -210,7 +211,7 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
                 if (entries != null && valueIndex >= 0) {
                     entries[valueIndex]
                 } else {
-                    preference.context.getString(androidx.preference.R.string.not_set)
+                    preference.getAndroidXNotSetString()
                 }
             }
         }

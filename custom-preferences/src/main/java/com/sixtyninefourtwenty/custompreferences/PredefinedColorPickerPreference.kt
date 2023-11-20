@@ -20,6 +20,7 @@ import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
 import com.github.dhaval2404.colorpicker.MaterialColorPicker
+import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 
 /**
  * A [Preference] that shows a [MaterialColorPicker]. This preference saves an int value.
@@ -181,7 +182,7 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
                 if (prefColor != null) {
                     "#${Integer.toHexString(prefColor)}"
                 } else {
-                    it.context.getString(androidx.preference.R.string.not_set)
+                    it.getAndroidXNotSetString()
                 }
             }
         }

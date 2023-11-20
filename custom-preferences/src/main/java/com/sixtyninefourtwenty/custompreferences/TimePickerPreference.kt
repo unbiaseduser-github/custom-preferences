@@ -13,6 +13,7 @@ import androidx.preference.DialogPreference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -155,7 +156,7 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
                         timeFormatPattern12h.format(time)
                     }
                 } else {
-                    it.context.getString(androidx.preference.R.string.not_set)
+                    it.getAndroidXNotSetString()
                 }
             }
         }

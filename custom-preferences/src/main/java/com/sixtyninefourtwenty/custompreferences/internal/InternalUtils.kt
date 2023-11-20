@@ -1,20 +1,14 @@
 package com.sixtyninefourtwenty.custompreferences.internal
 
-import android.content.res.TypedArray
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Resources
+import androidx.preference.Preference
 
-@OptIn(ExperimentalContracts::class)
-internal inline fun <R> TypedArray.useCompat(block: (TypedArray) -> R): R {
-    contract {
-        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
-    }
-    return if (this is AutoCloseable) {
-        use(block)
-    } else try {
-        block(this)
-    } finally {
-        recycle()
-    }
-}
+@SuppressLint("PrivateResource")
+internal fun Resources.getAndroidXNotSetString() =
+    getString(androidx.preference.R.string.not_set)
+
+internal fun Context.getAndroidXNotSetString() = resources.getAndroidXNotSetString()
+
+internal fun Preference.getAndroidXNotSetString() = context.getAndroidXNotSetString()

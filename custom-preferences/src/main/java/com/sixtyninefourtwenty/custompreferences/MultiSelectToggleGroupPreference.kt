@@ -11,6 +11,7 @@ import androidx.core.view.children
 import androidx.core.view.get
 import androidx.preference.Preference
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 
 /**
  * [AbstractToggleGroupPreference] that allows users to select multiple options. This preference
@@ -195,7 +196,7 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
             if (values != null) {
                 summaryWhenSet(values)
             } else {
-                it.context.getString(androidx.preference.R.string.not_set)
+                it.getAndroidXNotSetString()
             }
         }
     }
