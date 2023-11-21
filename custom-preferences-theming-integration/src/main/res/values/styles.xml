@@ -12,19 +12,19 @@
         <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material2</item>
         <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material2</item>
     </style>
-    <style name="AppTheme.Material3.CustomColors.WithCustomPreferences" parent="AppTheme.Material3.CustomColors">
+    <style name="AppTheme.Material3.CustomColors.WithCustomPreferences" parent="AppTheme.Material3.CustomColors.WithPreferences">
         <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
         <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
         <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>
         <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material3</item>
     </style>
-    <style name="AppTheme.Material3.DynamicColors.WithCustomPreferences" parent="AppTheme.Material3.DynamicColors">
+    <style name="AppTheme.Material3.DynamicColors.WithCustomPreferences" parent="AppTheme.Material3.DynamicColors.WithPreferences">
         <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
         <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
         <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>
         <item name="sliderPreferenceStyle">@style/Preference.SliderPreference.Material3</item>
     </style>
-    <style name="AppTheme.Material3.Fallback.WithCustomPreferences" parent="AppTheme.Material3.Fallback">
+    <style name="AppTheme.Material3.Fallback.WithCustomPreferences" parent="AppTheme.Material3.Fallback.WithPreferences">
         <item name="preferenceCustomViewUnderneathStyle">@style/Preference.CustomViewUnderneath.Material3</item>
         <item name="preferenceScrollableCustomViewUnderneathStyle">@style/Preference.ScrollableCustomViewUnderneath.Material3</item>
         <item name="abstractToggleGroupPreferenceStyle">@style/Preference.AbstractToggleGroup.Material3</item>

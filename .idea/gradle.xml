@@ -13,8 +13,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/colorpicker" />
             <option value="$PROJECT_DIR$/custom-preferences" />
+            <option value="$PROJECT_DIR$/custom-preferences-theming-integration" />
             <option value="$PROJECT_DIR$/sample-app" />
-            <option value="$PROJECT_DIR$/theming-integration" />
           </set>
         </option>
       </GradleProjectSettings>
