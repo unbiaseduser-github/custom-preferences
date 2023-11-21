@@ -44,13 +44,13 @@ afterEvaluate {
         publications {
             register<MavenPublication>("release") {
                 groupId = "com.sixtyninefourtwenty"
-                artifactId = "theming-integration"
+                artifactId = "custom-preferences-theming-integration"
                 version = "1.1.1"
 
                 from(components["release"])
 
                 pom {
-                    name.set("theming-integration")
+                    name.set("custom-preferences-theming-integration")
                     description.set("Integration of custom preferences' styling with my theming library")
 
                     licenses {
