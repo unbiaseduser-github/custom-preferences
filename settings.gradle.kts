@@ -18,4 +18,3 @@ rootProject.name = "custom-preferences"
 include(":custom-preferences")
 include(":sample-app")
 include(":colorpicker")
-include(":custom-preferences-theming-integration")
