@@ -30,6 +30,8 @@ class MaterialColorPickerDialog : DialogFragment() {
     private var colors: List<String>? = null
     private var isTickColorPerCard: Boolean = false
     private lateinit var binding: DialogMaterialColorPickerBinding
+    private lateinit var adapter: MaterialColorPickerAdapter
+    private var positiveButtonClicked: Boolean = false
 
     companion object {
 
@@ -94,7 +96,7 @@ class MaterialColorPickerDialog : DialogFragment() {
 
         // Setup Color Listing Adapter
         val colorList = colors ?: ColorUtil.getColors(context, colorSwatch.value)
-        val adapter = MaterialColorPickerAdapter(colorList)
+        adapter = MaterialColorPickerAdapter(colorList)
         adapter.setColorShape(colorShape)
         adapter.setTickColorPerCard(isTickColorPerCard)
         if (!defaultColor.isNullOrBlank()) {
@@ -109,18 +111,21 @@ class MaterialColorPickerDialog : DialogFragment() {
 
         // Set Submit Click Listener
         dialog.setPositiveButton(positiveButton) { _, _ ->
-            val color = adapter.getSelectedColor()
-            if (color.isNotBlank()) {
-                colorListener?.onColorSelected(ColorUtil.parseColor(color), color)
-            }
+            positiveButtonClicked = true
         }
 
         return dialog.create().apply { setButtonTextColor() }
     }
 
-    override fun dismiss() {
-        super.dismiss()
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
         dismissListener?.onDismiss()
+        if (positiveButtonClicked) {
+            val color = adapter.getSelectedColor()
+            if (color.isNotBlank()) {
+                colorListener?.onColorSelected(ColorUtil.parseColor(color), color)
+            }
+        }
     }
 
     override fun onCancel(dialog: DialogInterface) {
