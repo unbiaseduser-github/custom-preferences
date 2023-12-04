@@ -25,7 +25,7 @@ import com.sixtyninefourtwenty.custompreferences.SliderPreference.Companion.DEFA
  * This preference saves a float value.
  *
  * Style attribute: [R.attr.sliderPreferenceStyle], default
- * [R.style.Preference_SliderPreference_Material3]
+ * [R.style.Preference_SliderPreference]
  *
  * Note that this preference always has a value (see [DEFAULT_VALUE]), due to the fact that it's
  * impossible to represent a "no value" state on the UI.
@@ -36,7 +36,7 @@ open class SliderPreference @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @SuppressLint("RestrictedApi")
     defStyleAttr: Int = TypedArrayUtils.getAttr(context, R.attr.sliderPreferenceStyle, 0),
-    defStyleRes: Int = R.style.Preference_SliderPreference_Material3
+    defStyleRes: Int = R.style.Preference_SliderPreference
 ) : PreferenceCustomViewUnderneath(context, attrs, defStyleAttr, defStyleRes), CanSetPreferenceChangeListener<Float> {
 
     private var _value: Float = DEFAULT_VALUE

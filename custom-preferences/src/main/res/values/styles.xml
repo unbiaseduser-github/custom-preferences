@@ -3,28 +3,32 @@
     <style name="Preference.PredefinedColorPicker" parent="Preference.Material">
         <item name="android:widgetLayout">@layout/preference_widget_color_swatch</item>
     </style>
-    <style name="Preference.CustomViewUnderneath.Material2" parent="Preference.Material">
-        <item name="android:layout">@layout/preference_custom_view_underneath_m2</item>
+
+    <style name="Preference.CustomViewUnderneath" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_custom_view_underneath</item>
     </style>
-    <style name="Preference.CustomViewUnderneath.Material3" parent="Preference.Material">
-        <item name="android:layout">@layout/preference_custom_view_underneath_m3</item>
+    <!-- Kept for compatibility, will be removed in 3.0 -->
+    <style name="Preference.CustomViewUnderneath.Material2" parent="Preference.CustomViewUnderneath"/>
+    <style name="Preference.CustomViewUnderneath.Material3" parent="Preference.CustomViewUnderneath"/>
+
+    <style name="Preference.ScrollableCustomViewUnderneath" parent="Preference.Material">
+        <item name="android:layout">@layout/preference_scrollable_custom_view_underneath</item>
     </style>
-    <style name="Preference.ScrollableCustomViewUnderneath.Material2" parent="Preference.Material">
-        <item name="android:layout">@layout/preference_scrollable_custom_view_underneath_m2</item>
-    </style>
-    <style name="Preference.ScrollableCustomViewUnderneath.Material3" parent="Preference.Material">
-        <item name="android:layout">@layout/preference_scrollable_custom_view_underneath_m3</item>
-    </style>
-    <style name="Preference.AbstractToggleGroup.Material2" parent="Preference.ScrollableCustomViewUnderneath.Material2">
+    <!-- Kept for compatibility, will be removed in 3.0 -->
+    <style name="Preference.ScrollableCustomViewUnderneath.Material2" parent="Preference.ScrollableCustomViewUnderneath"/>
+    <style name="Preference.ScrollableCustomViewUnderneath.Material3" parent="Preference.ScrollableCustomViewUnderneath"/>
+
+    <style name="Preference.AbstractToggleGroup" parent="Preference.ScrollableCustomViewUnderneath">
         <item name="android:widgetLayout">@layout/toggle_group_preference_widget</item>
     </style>
-    <style name="Preference.AbstractToggleGroup.Material3" parent="Preference.ScrollableCustomViewUnderneath.Material3">
-        <item name="android:widgetLayout">@layout/toggle_group_preference_widget</item>
-    </style>
-    <style name="Preference.SliderPreference.Material2" parent="Preference.CustomViewUnderneath.Material2">
+    <!-- Kept for compatibility, will be removed in 3.0 -->
+    <style name="Preference.AbstractToggleGroup.Material2" parent="Preference.AbstractToggleGroup"/>
+    <style name="Preference.AbstractToggleGroup.Material3" parent="Preference.AbstractToggleGroup"/>
+
+    <style name="Preference.SliderPreference" parent="Preference.CustomViewUnderneath">
         <item name="android:widgetLayout">@layout/slider_preference_widget</item>
     </style>
-    <style name="Preference.SliderPreference.Material3" parent="Preference.CustomViewUnderneath.Material3">
-        <item name="android:widgetLayout">@layout/slider_preference_widget</item>
-    </style>
+    <!-- Kept for compatibility, will be removed in 3.0 -->
+    <style name="Preference.SliderPreference.Material2" parent="Preference.SliderPreference"/>
+    <style name="Preference.SliderPreference.Material3" parent="Preference.SliderPreference"/>
 </resources>
