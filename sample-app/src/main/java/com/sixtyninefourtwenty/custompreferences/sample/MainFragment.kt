@@ -8,6 +8,7 @@ import com.sixtyninefourtwenty.custompreferences.PreferenceFragmentCompatAccommo
 import com.sixtyninefourtwenty.custompreferences.SliderPreference
 import com.sixtyninefourtwenty.custompreferences.TimePickerPreference
 import com.sixtyninefourtwenty.custompreferences.ToggleGroupPreference
+import com.sixtyninefourtwenty.custompreferences.installConfigurationChangePatch
 import java.time.format.DateTimeFormatter
 
 private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -15,6 +16,7 @@ private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:m
 class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        installConfigurationChangePatch()
         val context = requireContext()
         preferenceScreen = preferenceManager.createPreferenceScreen(context).apply {
             addPreference(PredefinedColorPickerPreference(context).apply {

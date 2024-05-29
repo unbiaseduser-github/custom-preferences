@@ -72,4 +72,4 @@ abstract class AbstractCustomDialogPreference : DialogPreference {
 
 }
 
-private const val TAG = "androidx.preference.PreferenceFragment.DIALOG"
+internal const val TAG = "androidx.preference.PreferenceFragment.DIALOG"
