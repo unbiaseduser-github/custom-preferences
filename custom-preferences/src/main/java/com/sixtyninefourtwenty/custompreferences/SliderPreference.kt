@@ -86,20 +86,72 @@ open class SliderPreference @JvmOverloads constructor(
      */
     @JvmOverloads
     fun setProperties(
-        value: Float = this.value,
-        valueFrom: Float = this.valueFrom,
-        valueTo: Float = this.valueTo,
-        stepSize: Float = this.stepSize,
-        isTickVisible: Boolean = this.isTickVisible,
-        isLabelVisible: Boolean = this.isLabelVisible
+        value: Float? = null,
+        valueFrom: Float? = null,
+        valueTo: Float? = null,
+        stepSize: Float? = null,
+        isTickVisible: Boolean? = null,
+        isLabelVisible: Boolean? = null
     ) {
-        this._value = value
-        this._valueFrom = valueFrom
-        this._valueTo = valueTo
-        this._stepSize = stepSize
-        this._isTickVisible = isTickVisible
-        this._isLabelVisible = isLabelVisible
+        if (value != null) {
+            this._value = value
+        }
+        if (valueFrom != null) {
+            this._valueFrom = valueFrom
+        }
+        if (valueTo != null) {
+            this._valueTo = valueTo
+        }
+        if (stepSize != null) {
+            this._stepSize = stepSize
+        }
+        if (isTickVisible != null) {
+            this._isTickVisible = isTickVisible
+        }
+        if (isLabelVisible != null) {
+            this._isLabelVisible = isLabelVisible
+        }
         notifyChanged()
+    }
+
+    /**
+     * @see setProperties
+     */
+    fun setProperties(properties: Properties) = setProperties(
+        value = properties.value,
+        valueFrom = properties.valueFrom,
+        valueTo = properties.valueTo,
+        stepSize = properties.stepSize,
+        isTickVisible = properties.isTickVisible,
+        isLabelVisible = properties.isLabelVisible
+    )
+
+    class Properties private constructor(
+        @JvmField internal val value: Float?,
+        @JvmField internal val valueFrom: Float?,
+        @JvmField internal val valueTo: Float?,
+        @JvmField internal val stepSize: Float?,
+        @JvmField internal val isTickVisible: Boolean?,
+        @JvmField internal val isLabelVisible: Boolean?,
+    ) {
+
+        class Builder {
+            private var value: Float? = null
+            private var valueFrom: Float? = null
+            private var valueTo: Float? = null
+            private var stepSize: Float? = null
+            private var isTickVisible: Boolean? = null
+            private var isLabelVisible: Boolean? = null
+
+            fun setValue(value: Float?) = apply { this.value = value }
+            fun setValueFrom(valueFrom: Float?) = apply { this.valueFrom = valueFrom }
+            fun setValueTo(valueTo: Float?) = apply { this.valueTo = valueTo }
+            fun setStepSize(stepSize: Float?) = apply { this.stepSize = stepSize }
+            fun setTickVisible(isTickVisible: Boolean?) = apply { this.isTickVisible = isTickVisible }
+            fun setLabelVisible(isLabelVisible: Boolean?) = apply { this.isLabelVisible = isLabelVisible }
+            fun build() = Properties(value, valueFrom, valueTo, stepSize, isTickVisible, isLabelVisible)
+        }
+
     }
 
     private val onSliderTouchListener = object : Slider.OnSliderTouchListener {
