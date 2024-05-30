@@ -58,12 +58,12 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
     }
 
     override val isPreferenceSingleSelection: Boolean = false
-    private var _values: Set<String>? = null
-    var values: Set<String>?
+    private var _values: Set<String> = setOf()
+    var values: Set<String>
         get() = _values
         set(value) = setValueInternal(value, true)
 
-    private fun setValueInternal(values: Set<String>?, notifyChanged: Boolean) {
+    private fun setValueInternal(values: Set<String>, notifyChanged: Boolean) {
         this._values = values
         persistStringSet(values)
         if (notifyChanged) {
@@ -107,9 +107,9 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
             val entryValues = copyOfEntryValues()
             val index = group.indexOfChild(group.children.first { it.id == checkedId })
             val newValues = if (isChecked) {
-                values.orEmpty() + entryValues!![index].toString()
+                values + entryValues!![index].toString()
             } else {
-                values.orEmpty() - entryValues!![index].toString()
+                values - entryValues!![index].toString()
             }
             if (callChangeListener(newValues)) {
                 setValueInternal(newValues, false)
@@ -134,13 +134,13 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
         setTypedPreferenceChangeListener(block)
     }
 
-    override fun onGetDefaultValue(a: TypedArray, index: Int): Any {
-        return a.getTextArray(index).mapTo(mutableSetOf()) { it.toString() }
+    override fun onGetDefaultValue(a: TypedArray, index: Int): Any? {
+        return a.getTextArray(index)?.mapTo(mutableSetOf()) { it.toString() }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onSetInitialValue(defaultValue: Any?) {
-        values = getPersistedStringSet(defaultValue as Set<String>?)
+        values = getPersistedStringSet(defaultValue as Set<String>?).orEmpty()
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -161,7 +161,7 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
         }
 
         super.onRestoreInstanceState(state.superState)
-        values = state.values
+        values = state.values.orEmpty()
     }
 
     private class SavedState : AbstractToggleGroupPreference.SavedState {
@@ -190,10 +190,10 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
     companion object {
         @JvmStatic
         fun createSummaryProvider(
-            summaryWhenSet: (Set<String>) -> CharSequence
+            summaryWhenSet: (notEmptyValues: Set<String>) -> CharSequence
         ) = Preference.SummaryProvider<MultiSelectToggleGroupPreference> {
             val values = it.values
-            if (values != null) {
+            if (values.isNotEmpty()) {
                 summaryWhenSet(values)
             } else {
                 it.getAndroidXNotSetString()
