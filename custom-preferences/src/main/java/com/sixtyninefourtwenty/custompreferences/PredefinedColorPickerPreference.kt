@@ -21,6 +21,7 @@ import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
 import com.github.dhaval2404.colorpicker.MaterialColorPicker
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
+import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
 
 /**
  * A [Preference] that shows a [MaterialColorPicker]. This preference saves an int value.
@@ -52,12 +53,21 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
         }
     }
 
+    @ColorInt
     var color: Int? = null
         set(value) {
             field = value
             persistInt(value ?: Int.MIN_VALUE)
             notifyChanged()
         }
+
+    /**
+     * Return the color this preference has.
+     * @throws IllegalStateException if the value has not been set, either from a default value or from user input
+     * @see color
+     */
+    @ColorInt
+    fun requireColor() = color ?: throwValueNotSetException()
 
     @ColorInt
     private var availableColors: IntArray
@@ -79,6 +89,7 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
 
     fun copyOfAvailableColors() = availableColors.clone()
 
+    @SuppressLint("ResourceType") // MaterialColorPicker.Builder.setDefaultColor takes a color int, not a color resource :/
     override fun createDialog(): DialogFragment {
         return MaterialColorPicker.Builder(context)
             .also {

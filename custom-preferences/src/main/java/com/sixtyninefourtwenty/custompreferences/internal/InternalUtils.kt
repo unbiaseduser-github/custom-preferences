@@ -12,3 +12,6 @@ internal fun Resources.getAndroidXNotSetString() =
 internal fun Context.getAndroidXNotSetString() = resources.getAndroidXNotSetString()
 
 internal fun Preference.getAndroidXNotSetString() = context.getAndroidXNotSetString()
+
+internal fun Preference.throwValueNotSetException(): Nothing =
+    throw IllegalStateException("Preference ${key ?: "has no key,"} does not have a default value and has not been set.")

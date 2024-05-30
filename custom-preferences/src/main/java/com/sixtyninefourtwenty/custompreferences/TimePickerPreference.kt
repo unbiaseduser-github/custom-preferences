@@ -14,6 +14,7 @@ import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
+import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -64,6 +65,13 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
             persistString(value?.let(timeFormatPattern::format))
             notifyChanged()
         }
+
+    /**
+     * Return the [LocalTime] this preference has.
+     * @throws IllegalStateException if the time has not been set, either from a default value or from user input
+     * @see time
+     */
+    fun requireTime() = time ?: throwValueNotSetException()
 
     override fun createDialog(): DialogFragment {
         return MaterialTimePicker.Builder()
