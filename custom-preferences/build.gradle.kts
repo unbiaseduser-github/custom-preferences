@@ -11,6 +11,7 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
+            withJavadocJar()
         }
     }
 
@@ -52,7 +53,8 @@ afterEvaluate {
 
                 pom {
                     name.set("custom-preferences")
-                    description.set("Custom preferences")
+                    description.set("Extension of the AndroidX preference library that adds more preferences")
+                    url.set("https://github.com/unbiaseduser-github/custom-preferences")
 
                     licenses {
                         license {
@@ -63,11 +65,17 @@ afterEvaluate {
 
                     developers {
                         developer {
-                            id.set("unbiaseduser")
+                            id.set("unbiaseduser-github")
                             name.set("Dang Quang Trung")
                             email.set("quangtrung02hn16@gmail.com")
-                            url.set("https://github.com/unbiaseduser")
+                            url.set("https://github.com/unbiaseduser-github")
                         }
+                    }
+
+                    scm {
+                        connection.set("scm:git:git://github.com/unbiaseduser-github/custom-preferences.git")
+                        developerConnection.set("scm:git:ssh://github.com:unbiaseduser-github/custom-preferences.git")
+                        url.set("https://github.com/unbiaseduser-github/custom-preferences/tree/master")
                     }
                 }
             }
