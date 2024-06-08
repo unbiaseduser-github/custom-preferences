@@ -15,8 +15,11 @@ import androidx.preference.PreferenceDataStore
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 /**
  * A [DialogPreference] that shows a [MaterialTimePicker]. This preference saves a String value,
@@ -162,16 +165,16 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
         fun getSimpleSummaryProvider() = mySummaryProvider
         @get:JvmSynthetic
         internal val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-        private val timeFormatPattern12h: DateTimeFormatter = DateTimeFormatter.ofPattern("KK:mm a")
         private val mySummaryProvider: SummaryProvider<TimePickerPreference> by lazy {
             SummaryProvider<TimePickerPreference> {
                 val time = it.time
                 return@SummaryProvider if (time != null) {
-                    if (DateFormat.is24HourFormat(it.context)) {
-                        timeFormatPattern.format(time)
-                    } else {
-                        timeFormatPattern12h.format(time)
-                    }
+                    DateFormat.getTimeFormat(it.context)
+                        .format(Date.from(
+                            time.atDate(LocalDate.now())
+                                .atZone(ZoneId.systemDefault())
+                                .toInstant()
+                        ))
                 } else {
                     it.getAndroidXNotSetString()
                 }
