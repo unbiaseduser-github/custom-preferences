@@ -65,7 +65,7 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
     var time: LocalTime? = null
         set(value) {
             field = value
-            persistString(value?.let(timeFormatPattern::format))
+            persistString(value?.let { timeToString(it) })
             notifyChanged()
         }
 
@@ -108,7 +108,7 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
     override fun onSetInitialValue(defaultValue: Any?) {
         val actualDefaultValue = defaultValue as String?
         val value: String? = getPersistedString(actualDefaultValue)
-        time = value?.let { LocalTime.parse(it, timeFormatPattern) }
+        time = value?.let { stringToTime(it) }
         persistString(value)
     }
 
@@ -163,8 +163,11 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
     companion object {
         @JvmStatic
         fun getSimpleSummaryProvider() = mySummaryProvider
-        @get:JvmSynthetic
-        internal val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        private val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        @JvmStatic
+        fun stringToTime(timeString: String): LocalTime = LocalTime.parse(timeString, timeFormatPattern)
+        @JvmStatic
+        fun timeToString(time: LocalTime): String = timeFormatPattern.format(time)
         private val mySummaryProvider: SummaryProvider<TimePickerPreference> by lazy {
             SummaryProvider<TimePickerPreference> {
                 val time = it.time
