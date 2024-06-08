@@ -21,15 +21,12 @@ fun <T> Preference.setTypedPreferenceChangeListener(block: ((T) -> Boolean)?) {
  * [PreferenceFragmentCompat.onCreatePreferences].
  */
 fun PreferenceFragmentCompat.installConfigurationChangePatch() {
-    parentFragmentManager.addFragmentOnAttachListener { _, fragment ->
-        if (fragment is MaterialTimePicker && TAG == fragment.tag) {
-            // Guard against multiple configuration changes without the fragment being dismissed
-            fragment.clearOnPositiveButtonClickListeners()
-            fragment.addOnPositiveButtonClickListener {
-                val key = fragment.requireArguments().getString("key") ?: return@addOnPositiveButtonClickListener
-                val pref = findPreference<TimePickerPreference>(key) ?: return@addOnPositiveButtonClickListener
-                pref.handleNewlyPickedValue(LocalTime.of(fragment.hour, fragment.minute))
-            }
+    val existingDialogFragment = parentFragmentManager.findFragmentByTag(TAG) ?: return
+    if (existingDialogFragment is MaterialTimePicker) {
+        existingDialogFragment.addOnPositiveButtonClickListener {
+            val key = existingDialogFragment.requireArguments().getString("key") ?: return@addOnPositiveButtonClickListener
+            val pref = findPreference<TimePickerPreference>(key) ?: return@addOnPositiveButtonClickListener
+            pref.handleNewlyPickedValue(LocalTime.of(existingDialogFragment.hour, existingDialogFragment.minute))
         }
     }
 }

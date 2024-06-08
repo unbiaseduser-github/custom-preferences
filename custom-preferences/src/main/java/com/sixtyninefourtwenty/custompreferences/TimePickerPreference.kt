@@ -83,12 +83,6 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
             .setMinute(time?.minute ?: 0)
             .build()
             .apply {
-                /* Needed since PreferenceFragmentCompat.installConfigurationChangePatch essentially
-                adds another listener to this fragment. I can just not add listener here but that
-                would screw over PreferenceFragmentCompat subclasses that *don't* call
-                installConfigurationChangePatch.
-                */
-                clearOnPositiveButtonClickListeners()
                 addOnPositiveButtonClickListener {
                     handleNewlyPickedValue(LocalTime.of(hour, minute))
                 }
