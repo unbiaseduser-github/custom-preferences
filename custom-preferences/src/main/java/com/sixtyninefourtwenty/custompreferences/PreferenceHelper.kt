@@ -7,6 +7,9 @@ import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.timepicker.MaterialTimePicker
 import java.time.LocalTime
 
+/**
+ * Helper method for implementing [CanSetPreferenceChangeListener].
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T> Preference.setTypedPreferenceChangeListener(block: ((T) -> Boolean)?) {
     if (block != null) {
@@ -19,6 +22,8 @@ fun <T> Preference.setTypedPreferenceChangeListener(block: ((T) -> Boolean)?) {
 /**
  * Make [TimePickerPreference]'s dialog not break on configuration changes. Call this in
  * [PreferenceFragmentCompat.onCreatePreferences].
+ *
+ * **Limitation:** If your preference doesn't have a key, this method is essentially useless.
  */
 fun PreferenceFragmentCompat.installConfigurationChangePatch() {
     val existingDialogFragment = parentFragmentManager.findFragmentByTag(TAG) ?: return

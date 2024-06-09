@@ -19,6 +19,9 @@ fun SharedPreferences.getLocalTime(key: String, defValue: LocalTime): LocalTime 
 fun SharedPreferences.getLocalTimeOrNull(key: String): LocalTime? =
     getString(key, null)?.let { TimePickerPreference.stringToTime(it) }
 
+/**
+ * Persist a [LocalTime] associated to a [key] managed by a [TimePickerPreference].
+ */
 fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime?): SharedPreferences.Editor =
     putString(key, value?.let { TimePickerPreference.timeToString(it) })
 

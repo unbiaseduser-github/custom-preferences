@@ -8,7 +8,8 @@ import androidx.preference.Preference
  * declaration to see what type of object to set a listener on.
  *
  * Implementation notes: In [setOnPreferenceChange], call [Preference.setTypedPreferenceChangeListener].
- * That will internally use [Preference.setOnPreferenceChangeListener].
+ * That will internally use [Preference.setOnPreferenceChangeListener], so there's no weirdness
+ * going on in your preference.
  */
 interface CanSetPreferenceChangeListener<T> {
     fun setOnPreferenceChange(block: ((newValue: T) -> Boolean)?)
