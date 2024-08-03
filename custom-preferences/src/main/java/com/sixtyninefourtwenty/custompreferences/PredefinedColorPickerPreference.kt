@@ -107,12 +107,16 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
                 }
             }
             .setColorListener { color, _ ->
-                if (callChangeListener(color)) {
-                    this.color = color
-                }
+                handleNewlyPickedValue(color)
             }
             .build()
             .createDialog()
+    }
+
+    internal fun handleNewlyPickedValue(newColor: Int) {
+        if (callChangeListener(newColor)) {
+            this.color = newColor
+        }
     }
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
