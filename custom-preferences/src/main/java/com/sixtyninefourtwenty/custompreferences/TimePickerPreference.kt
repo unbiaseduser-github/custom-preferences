@@ -158,8 +158,20 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
         @JvmStatic
         fun getSimpleSummaryProvider() = mySummaryProvider
         private val timeFormatPattern: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        /**
+         * Converts a string that was created by [timeToString] to a [LocalTime].
+         */
         @JvmStatic
         fun stringToTime(timeString: String): LocalTime = LocalTime.parse(timeString, timeFormatPattern)
+
+        /**
+         * Converts a [LocalTime] to a string that can later be parsed by [stringToTime].
+         *
+         * This pair of methods is used by [SharedPreferences.getLocalTime] and [SharedPreferences.Editor.putLocalTime]
+         * and their [PreferenceDataStore] counterparts. If you need to work with this data without those methods,
+         * this pair of methods can be used to do so.
+         */
         @JvmStatic
         fun timeToString(time: LocalTime): String = timeFormatPattern.format(time)
         private val mySummaryProvider: SummaryProvider<TimePickerPreference> by lazy {
