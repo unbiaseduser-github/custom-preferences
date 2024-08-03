@@ -90,7 +90,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     api("androidx.preference:preference-ktx:1.2.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    implementation(project(":colorpicker"))
+    implementation("com.github.unbiaseduser-github:ColorPicker:2.3-patch1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

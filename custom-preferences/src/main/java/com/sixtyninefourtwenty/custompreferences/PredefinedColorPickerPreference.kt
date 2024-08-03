@@ -19,12 +19,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
-import com.github.dhaval2404.colorpicker.MaterialColorPicker
+import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
+import com.github.dhaval2404.colorpicker.MaterialColorPickerDialogFragment
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
 
 /**
- * A [Preference] that shows a [MaterialColorPicker]. This preference saves an int value.
+ * A [Preference] that shows a [MaterialColorPickerDialogFragment]. This preference saves an int value.
  *
  * Style attribute: [R.attr.predefinedColorPickerPreferenceStyle], default
  * [R.style.Preference_PredefinedColorPicker]
@@ -91,7 +92,7 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
 
     @SuppressLint("ResourceType") // MaterialColorPicker.Builder.setDefaultColor takes a color int, not a color resource :/
     override fun createDialog(): DialogFragment {
-        return MaterialColorPicker.Builder(context)
+        return MaterialColorPickerDialog.Builder(context)
             .also {
                 val prefDialogTitle = dialogTitle
                 if (prefDialogTitle != null) {
