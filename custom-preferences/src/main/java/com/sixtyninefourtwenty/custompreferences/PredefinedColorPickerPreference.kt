@@ -90,7 +90,6 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
 
     fun copyOfAvailableColors() = availableColors.clone()
 
-    @SuppressLint("ResourceType") // MaterialColorPicker.Builder.setDefaultColor takes a color int, not a color resource :/
     override fun createDialog(): DialogFragment {
         return MaterialColorPickerDialog.Builder(context)
             .also {
