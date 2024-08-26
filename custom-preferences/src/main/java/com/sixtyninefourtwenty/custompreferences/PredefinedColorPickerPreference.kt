@@ -23,6 +23,7 @@ import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialogFragment
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
+import java.util.Objects
 
 /**
  * A [Preference] that shows a [MaterialColorPickerDialogFragment]. This preference saves an int value.
@@ -57,9 +58,11 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
     @ColorInt
     var color: Int? = null
         set(value) {
-            field = value
-            persistInt(value ?: Int.MIN_VALUE)
-            notifyChanged()
+            if (!Objects.equals(field, value)) {
+                field = value
+                persistInt(value ?: Int.MIN_VALUE)
+                notifyChanged()
+            }
         }
 
     /**
