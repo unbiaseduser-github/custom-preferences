@@ -1,8 +1,10 @@
 package com.sixtyninefourtwenty.custompreferences
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.TypedArray
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.text.format.DateFormat
@@ -28,6 +30,8 @@ import java.util.Date
  * [SharedPreferences.getLocalTime] or [PreferenceDataStore.getLocalTime]. You can also set time
  * with [SharedPreferences.Editor.putLocalTime] or [PreferenceDataStore.putLocalTime].
  *
+ * This requires either `minSdk = 26` or [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) enabled.
+ *
  * Default value: A String representing a time in format `HH:mm`. For more information see
  * [DateTimeFormatter], section "Patterns for Formatting and Parsing".
  *
@@ -35,6 +39,7 @@ import java.util.Date
  * [androidx.preference.R.styleable.DialogPreference_dialogMessage] and
  * [setDialogMessage] have no effect.
  */
+@TargetApi(Build.VERSION_CODES.O)
 @Suppress("unused")
 open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferenceChangeListener<LocalTime> {
 
