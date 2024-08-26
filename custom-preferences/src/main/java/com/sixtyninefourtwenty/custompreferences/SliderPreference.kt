@@ -168,10 +168,12 @@ open class SliderPreference @JvmOverloads constructor(
     }
 
     private fun setValueInternal(value: Float, notifyChanged: Boolean) {
-        this._value = value
-        persistFloat(value)
-        if (notifyChanged) {
-            notifyChanged()
+        if (this._value != value) {
+            this._value = value
+            persistFloat(value)
+            if (notifyChanged) {
+                notifyChanged()
+            }
         }
     }
 
