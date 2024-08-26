@@ -94,7 +94,7 @@ open class SliderPreference @JvmOverloads constructor(
         isLabelVisible: Boolean? = null
     ) {
         if (value != null) {
-            this._value = value
+            setValueInternal(value, false)
         }
         if (valueFrom != null) {
             this._valueFrom = valueFrom
