@@ -32,6 +32,10 @@ import java.util.Objects
  * [R.style.Preference_PredefinedColorPicker]
  *
  * Default value: A String that can be processed by [Color.parseColor].
+ *
+ * **Note**: Due to the nature of the picker,
+ * [androidx.preference.R.styleable.DialogPreference_dialogMessage] and
+ * [setDialogMessage] have no effect.
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 open class PredefinedColorPickerPreference @JvmOverloads constructor(
