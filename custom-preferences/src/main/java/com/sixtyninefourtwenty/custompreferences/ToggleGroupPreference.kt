@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
+import java.util.Objects
 
 /**
  * [AbstractToggleGroupPreference] that allows users to select a single option. This preference
@@ -79,10 +80,12 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
     fun requireValue() = value ?: throwValueNotSetException()
 
     private fun setValueInternal(value: String?, notifyChanged: Boolean) {
-        this._value = value
-        persistString(value)
-        if (notifyChanged) {
-            notifyChanged()
+        if (!Objects.equals(this._value, value)) {
+            this._value = value
+            persistString(value)
+            if (notifyChanged) {
+                notifyChanged()
+            }
         }
     }
 

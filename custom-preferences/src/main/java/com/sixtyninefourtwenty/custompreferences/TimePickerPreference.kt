@@ -22,6 +22,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Objects
 
 /**
  * A [DialogPreference] that shows a [MaterialTimePicker]. This preference saves a String value,
@@ -69,9 +70,11 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
 
     var time: LocalTime? = null
         set(value) {
-            field = value
-            persistString(value?.let { timeToString(it) })
-            notifyChanged()
+            if (!Objects.equals(field, value)) {
+                field = value
+                persistString(value?.let { timeToString(it) })
+                notifyChanged()
+            }
         }
 
     /**
@@ -108,7 +111,6 @@ open class TimePickerPreference : AbstractCustomDialogPreference, CanSetPreferen
         val actualDefaultValue = defaultValue as String?
         val value: String? = getPersistedString(actualDefaultValue)
         time = value?.let { stringToTime(it) }
-        persistString(value)
     }
 
     override fun onSaveInstanceState(): Parcelable? {
