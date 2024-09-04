@@ -35,7 +35,7 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 groupId = "com.sixtyninefourtwenty"
                 artifactId = "custom-preferences"
-                version = "2.2.2"
+                version = "2.2.3"
 
                 from(components["release"])
 
