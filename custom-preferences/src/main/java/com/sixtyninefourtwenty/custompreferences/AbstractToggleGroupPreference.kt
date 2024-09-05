@@ -36,7 +36,7 @@ import com.sixtyninefourtwenty.custompreferences.AbstractToggleGroupPreference.S
  * rest (set listeners, check the appropriate button, etc.) on [bind].
  * - Subclasses' saved state classes must extend [SavedState].
  */
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -51,38 +51,39 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
      */
     protected abstract val isPreferenceSingleSelection: Boolean
 
-    private var entries: Array<CharSequence>? = null
-    private var entryValues: Array<CharSequence>? = null
-    private var icons: Array<Drawable?>? = null
-    fun copyOfEntries() = entries?.clone()
-    fun copyOfEntryValues() = entryValues?.clone()
-    fun copyOfIcons() = icons?.clone()
+    var entries: List<CharSequence> = listOf()
+        private set
+    var entryValues: List<CharSequence> = listOf()
+        private set
+    var icons: List<Drawable?>? = null
+        private set
+    @Deprecated(message = "Use list property.", replaceWith = ReplaceWith(expression = "entries"))
+    fun copyOfEntries() = entries.toTypedArray()
+    @Deprecated(message = "Use list property.", replaceWith = ReplaceWith(expression = "entryValues"))
+    fun copyOfEntryValues() = entryValues.toTypedArray()
+    @Deprecated(message = "Use list property.", replaceWith = ReplaceWith(expression = "icons"))
+    fun copyOfIcons() = icons?.toTypedArray()
 
     private fun checkEntries(
-        entries: Array<CharSequence>?,
-        entryValues: Array<CharSequence>?,
-        icons: Array<Drawable?>?
+        entries: List<CharSequence>,
+        entryValues: List<CharSequence>,
+        icons: List<Drawable?>?
     ) {
-        require((entries == null && entryValues == null) || (entries != null && entryValues != null)) {
-            "entries and entryValues must be both null or non-null"
+        require(entries.size == entryValues.size) {
+            "entries and entryValues must have the same number of items"
         }
-        if (entries != null && entryValues != null) {
-            require(entries.size == entryValues.size) {
-                "entries and entryValues must have the same number of items"
-            }
-            if (icons != null) {
-                require(entries.size == icons.size) {
-                    "entries, entryValues and icons must have the same number of items"
-                }
+        if (icons != null) {
+            require(entries.size == icons.size) {
+                "entries, entryValues and icons must have the same number of items"
             }
         }
     }
 
     @JvmOverloads
     fun setEntries(
-        entries: Array<CharSequence>?,
-        entryValues: Array<CharSequence>?,
-        icons: Array<Drawable?>? = null
+        entries: List<CharSequence>,
+        entryValues: List<CharSequence>,
+        icons: List<Drawable?>? = null
     ) {
         checkEntries(entries, entryValues, icons)
         this.entries = entries
@@ -91,13 +92,23 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         notifyChanged()
     }
 
-    private fun setupButtonsOnToggleGroup(
+    @Deprecated(message = "Use the version that takes lists.", replaceWith =
+        ReplaceWith("setEntries(entries?.toList().orEmpty(), entryValues?.toList().orEmpty(), icons?.toList())")
+    )
+    @JvmOverloads
+    fun setEntries(
         entries: Array<CharSequence>?,
         entryValues: Array<CharSequence>?,
-        icons: Array<Drawable?>?,
+        icons: Array<Drawable?>? = null
+    ) = setEntries(entries?.toList().orEmpty(), entryValues?.toList().orEmpty(), icons?.toList())
+
+    private fun setupButtonsOnToggleGroup(
+        entries: List<CharSequence>,
+        entryValues: List<CharSequence>,
+        icons: List<Drawable?>?,
         toggleGroup: MaterialButtonToggleGroup
     ) {
-        if (entries == null || entryValues == null) {
+        if (entries.isEmpty()) {
             toggleGroup.removeAllViews()
             return
         }
@@ -152,8 +163,8 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         }
 
         return SavedState(superState).also {
-            it.entries = this.entries
-            it.entryValues = this.entryValues
+            it.entries = this.entries.toTypedArray()
+            it.entryValues = this.entryValues.toTypedArray()
         }
     }
 
@@ -166,21 +177,21 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
 
         super.onRestoreInstanceState(state.superState)
         Log.w(this::class.java.simpleName, "Icons can't be restored through instance state")
-        entries = state.entries
-        entryValues = state.entryValues
+        entries = state.entries.toList()
+        entryValues = state.entryValues.toList()
     }
 
     protected open class SavedState : BaseSavedState {
 
         @JvmField
-        var entries: Array<CharSequence>? = null
+        var entries: Array<CharSequence> = arrayOf()
         @JvmField
-        var entryValues: Array<CharSequence>? = null
+        var entryValues: Array<CharSequence> = arrayOf()
 
         constructor(source: Parcel): super(source) {
             with(source.readBundle(this::class.java.classLoader)!!) {
-                entries = getCharSequenceArray(ENTRIES_KEY)
-                entryValues = getCharSequenceArray(ENTRY_VALUES_KEY)
+                entries = getCharSequenceArray(ENTRIES_KEY)!!
+                entryValues = getCharSequenceArray(ENTRY_VALUES_KEY)!!
             }
         }
 

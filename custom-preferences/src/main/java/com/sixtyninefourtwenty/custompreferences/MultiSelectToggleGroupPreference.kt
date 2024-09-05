@@ -34,24 +34,18 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
     }
 
     private fun init(ta: TypedArray) {
-        fun initIcons(): Array<Drawable?>? {
+        fun initIcons(): List<Drawable?>? {
             val arrayRes = ta.getResourceId(R.styleable.MultiSelectToggleGroupPreference_mstgp_icons, 0)
             return if (arrayRes == 0) {
                 null
             } else {
-                // Map drawables manually to avoid a List allocation
-                val drawableResIds = context.resources.getIntArray(arrayRes)
-                val drawables: Array<Drawable?> = arrayOfNulls(drawableResIds.size)
-                drawableResIds.forEachIndexed { index, resId ->
-                    drawables[index] = ContextCompat.getDrawable(context, resId)
-                }
-                drawables
+                context.resources.getIntArray(arrayRes).map { ContextCompat.getDrawable(context, it) }
             }
         }
 
         setEntries(
-            entries = ta.getTextArray(R.styleable.MultiSelectToggleGroupPreference_mstgp_entries),
-            entryValues = ta.getTextArray(R.styleable.MultiSelectToggleGroupPreference_mstgp_entryValues),
+            entries = ta.getTextArray(R.styleable.MultiSelectToggleGroupPreference_mstgp_entries)?.toList().orEmpty(),
+            entryValues = ta.getTextArray(R.styleable.MultiSelectToggleGroupPreference_mstgp_entryValues)?.toList().orEmpty(),
             icons = initIcons()
         )
         ta.recycle()
@@ -73,11 +67,11 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
 
     private fun setValuesOnToggleGroup(
         values: Set<String>?,
-        entryValues: Array<CharSequence>?,
+        entryValues: List<CharSequence>,
         toggleGroup: MaterialButtonToggleGroup
     ) {
         toggleGroup.removeOnButtonCheckedListener(buttonCheckedListener)
-        if (values.isNullOrEmpty() || entryValues == null) {
+        if (values.isNullOrEmpty()) {
             toggleGroup.clearChecked()
         } else {
             toggleGroup.clearChecked()
@@ -104,12 +98,11 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
             isChecked: Boolean
         ) {
             group.removeOnButtonCheckedListener(this)
-            val entryValues = copyOfEntryValues()
             val index = group.indexOfChild(group.children.first { it.id == checkedId })
             val newValues = if (isChecked) {
-                values + entryValues!![index].toString()
+                values + entryValues[index].toString()
             } else {
-                values - entryValues!![index].toString()
+                values - entryValues[index].toString()
             }
             if (callChangeListener(newValues)) {
                 setValueInternal(newValues, false)
@@ -125,7 +118,7 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
     }
 
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
-        setValuesOnToggleGroup(values, copyOfEntryValues(), toggleGroup)
+        setValuesOnToggleGroup(values, entryValues, toggleGroup)
         toggleGroup.clearOnButtonCheckedListeners()
         toggleGroup.addOnButtonCheckedListener(buttonCheckedListener)
     }

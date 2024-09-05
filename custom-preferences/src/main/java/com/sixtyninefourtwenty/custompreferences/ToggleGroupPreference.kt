@@ -36,24 +36,18 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
     }
 
     private fun init(ta: TypedArray) {
-        fun initIcons(): Array<Drawable?>? {
+        fun initIcons(): List<Drawable?>? {
             val arrayRes = ta.getResourceId(R.styleable.ToggleGroupPreference_tgp_icons, 0)
             return if (arrayRes == 0) {
                 null
             } else {
-                // Map drawables manually to avoid a List allocation
-                val drawableResIds = context.resources.getIntArray(arrayRes)
-                val drawables: Array<Drawable?> = arrayOfNulls(drawableResIds.size)
-                drawableResIds.forEachIndexed { index, resId ->
-                    drawables[index] = ContextCompat.getDrawable(context, resId)
-                }
-                drawables
+                context.resources.getIntArray(arrayRes).map { ContextCompat.getDrawable(context, it) }
             }
         }
 
         setEntries(
-            entries = ta.getTextArray(R.styleable.ToggleGroupPreference_tgp_entries),
-            entryValues = ta.getTextArray(R.styleable.ToggleGroupPreference_tgp_entryValues),
+            entries = ta.getTextArray(R.styleable.ToggleGroupPreference_tgp_entries)?.toList().orEmpty(),
+            entryValues = ta.getTextArray(R.styleable.ToggleGroupPreference_tgp_entryValues)?.toList().orEmpty(),
             icons = initIcons()
         )
         if (ta.getBoolean(R.styleable.ToggleGroupPreference_tgp_useSimpleSummaryProvider, false)) {
@@ -91,7 +85,7 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
 
     private fun setValueOnToggleGroup(
         value: String?,
-        entryValues: Array<CharSequence>?,
+        entryValues: List<CharSequence>?,
         toggleGroup: MaterialButtonToggleGroup
     ) {
         if (value == null || entryValues == null) {
@@ -107,21 +101,19 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
     }
 
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
-        val entryValues = copyOfEntryValues()
+        val entryValues = this.entryValues
         setValueOnToggleGroup(value, entryValues, toggleGroup)
-        if (entryValues != null) {
-            toggleGroup.children.forEachIndexed { index, view ->
-                view.setOnClickListener {
-                    val strEntryValue = entryValues[index].toString()
-                    if (callChangeListener(strEntryValue)) {
-                        setValueInternal(strEntryValue, false)
+        toggleGroup.children.forEachIndexed { index, view ->
+            view.setOnClickListener {
+                val strEntryValue = entryValues[index].toString()
+                if (callChangeListener(strEntryValue)) {
+                    setValueInternal(strEntryValue, false)
+                } else {
+                    val oldButtonIndex = value?.let { entryValues.indexOf(it) } ?: -1
+                    if (oldButtonIndex >= 0) {
+                        toggleGroup.check(toggleGroup[oldButtonIndex].id)
                     } else {
-                        val oldButtonIndex = value?.let { entryValues.indexOf(it) } ?: -1
-                        if (oldButtonIndex >= 0) {
-                            toggleGroup.check(toggleGroup[oldButtonIndex].id)
-                        } else {
-                            toggleGroup.clearChecked()
-                        }
+                        toggleGroup.clearChecked()
                     }
                 }
             }
@@ -185,14 +177,11 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
         fun getSimpleSummaryProvider() = summaryProvider
         private val summaryProvider by lazy(LazyThreadSafetyMode.NONE) {
             Preference.SummaryProvider<ToggleGroupPreference> { preference ->
-                val value = preference.value
-                val entryValues = preference.copyOfEntryValues()
-                val entries = preference.copyOfEntries()
-                val valueIndex = value?.let {
-                    entryValues?.indexOf(it) ?: -1
+                val valueIndex = preference.value?.let {
+                    preference.entryValues.indexOf(it)
                 } ?: -1
-                if (entries != null && valueIndex >= 0) {
-                    entries[valueIndex]
+                if (valueIndex >= 0) {
+                    preference.entries[valueIndex]
                 } else {
                     preference.getAndroidXNotSetString()
                 }

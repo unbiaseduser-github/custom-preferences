@@ -42,8 +42,8 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                 title = "Toggle group preference"
                 summaryProvider = ToggleGroupPreference.getSimpleSummaryProvider()
                 setEntries(
-                    entries = arrayOf("one", "two", "three", "four"),
-                    entryValues = arrayOf("One", "Two", "Three", "Four")
+                    entries = listOf("one", "two", "three", "four"),
+                    entryValues = listOf("One", "Two", "Three", "Four")
                 )
                 setOnPreferenceChange {
                     Toast.makeText(context, context.getString(R.string.value, it), Toast.LENGTH_SHORT).show()
@@ -57,8 +57,8 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                 key = "mstgp"
                 title = "Multi-select toggle group preference"
                 setEntries(
-                    entries = arrayOf("one1", "two2", "three3", "four4"),
-                    entryValues = arrayOf("One", "Two", "Three", "Four")
+                    entries = listOf("one1", "two2", "three3", "four4"),
+                    entryValues = listOf("One", "Two", "Three", "Four")
                 )
                 setOnPreferenceChange {
                     Toast.makeText(context, context.getString(R.string.value, it), Toast.LENGTH_SHORT).show()
@@ -72,8 +72,8 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                 key = "mstgp2"
                 title = "Multi-select toggle group preference"
                 setEntries(
-                    entries = arrayOf("one1", "two2", "three3"),
-                    entryValues = arrayOf("One", "Two", "Three")
+                    entries = listOf("one1", "two2", "three3"),
+                    entryValues = listOf("One", "Two", "Three")
                 )
                 setOnPreferenceChange {
                     Toast.makeText(context, context.getString(R.string.value, it), Toast.LENGTH_SHORT).show()
