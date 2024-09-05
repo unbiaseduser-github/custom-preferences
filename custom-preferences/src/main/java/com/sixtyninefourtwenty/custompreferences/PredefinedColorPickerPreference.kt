@@ -168,6 +168,7 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
 
     private class SavedState : BaseSavedState {
 
+        @JvmField
         var color: Int? = null
         lateinit var availableColors: IntArray
 
