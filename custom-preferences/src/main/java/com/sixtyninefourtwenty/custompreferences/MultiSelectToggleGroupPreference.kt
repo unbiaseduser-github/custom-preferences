@@ -26,11 +26,11 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context.obtainStyledAttributes(attrs, R.styleable.MultiSelectToggleGroupPreference))
+        init(context.obtainStyledAttributes(attrs, R.styleable.MultiSelectToggleGroupPreference, defStyleAttr, 0))
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context.obtainStyledAttributes(attrs, R.styleable.MultiSelectToggleGroupPreference))
+        init(context.obtainStyledAttributes(attrs, R.styleable.MultiSelectToggleGroupPreference, defStyleAttr, defStyleRes))
     }
 
     private fun init(ta: TypedArray) {
