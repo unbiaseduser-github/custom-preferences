@@ -27,7 +27,7 @@ import com.sixtyninefourtwenty.custompreferences.AbstractToggleGroupPreference.S
  * available
  *
  * Style attribute: [R.attr.abstractToggleGroupPreferenceStyle], default
- * [R.style.Preference_AbstractToggleGroup_Material3].
+ * [R.style.Preference_AbstractToggleGroup].
  *
  * **Note:** If this preference is not persistent, it cannot restore its icon array via saved state.
  *
@@ -42,7 +42,7 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     @SuppressLint("RestrictedApi")
     defStyleAttr: Int = TypedArrayUtils.getAttr(context, R.attr.abstractToggleGroupPreferenceStyle, 0),
-    defStyleRes: Int = R.style.Preference_AbstractToggleGroup_Material3
+    defStyleRes: Int = R.style.Preference_AbstractToggleGroup
 ) : PreferenceScrollableCustomViewUnderneath(context, attrs, defStyleAttr, defStyleRes) {
 
     /**
