@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.sixtyninefourtwenty.custompreferences"
-    compileSdk = 34
+    compileSdk = 35
 
     publishing {
         singleVariant("release") {
