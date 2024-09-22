@@ -194,6 +194,11 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
 
     companion object {
         @JvmStatic
+        @Deprecated(
+            message = "Doesn't work on normal user input since inline preferences" +
+                    " don't update the rest of the UI when that happens.",
+            level = DeprecationLevel.ERROR
+        )
         fun createSummaryProvider(
             summaryWhenSet: (notEmptyValues: Set<String>) -> CharSequence
         ) = Preference.SummaryProvider<MultiSelectToggleGroupPreference> {

@@ -18,7 +18,6 @@
         <attr name="tgp_entries" format="reference"/>
         <attr name="tgp_entryValues" format="reference"/>
         <attr name="tgp_icons" format="reference"/>
-        <attr name="tgp_useSimpleSummaryProvider" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="MultiSelectToggleGroupPreference">
         <attr name="mstgp_entries" format="reference"/>

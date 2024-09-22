@@ -50,9 +50,6 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
             entryValues = ta.getTextArray(R.styleable.ToggleGroupPreference_tgp_entryValues)?.toList().orEmpty(),
             icons = initIcons()
         )
-        if (ta.getBoolean(R.styleable.ToggleGroupPreference_tgp_useSimpleSummaryProvider, false)) {
-            summaryProvider = getSimpleSummaryProvider()
-        }
         ta.recycle()
     }
 
@@ -186,6 +183,11 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
 
     companion object {
         @JvmStatic
+        @Deprecated(
+            message = "Doesn't work on normal user input since inline preferences" +
+                    " don't update the rest of the UI when that happens.",
+            level = DeprecationLevel.ERROR
+        )
         fun getSimpleSummaryProvider() = summaryProvider
         private val summaryProvider by lazy(LazyThreadSafetyMode.NONE) {
             Preference.SummaryProvider<ToggleGroupPreference> { preference ->
