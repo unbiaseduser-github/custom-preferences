@@ -117,6 +117,18 @@ open class MultiSelectToggleGroupPreference : AbstractToggleGroupPreference, Can
         }
     }
 
+    override fun handleButtonOnKeyInput(
+        toggleGroup: MaterialButtonToggleGroup,
+        buttonIndex: Int,
+        buttonId: Int
+    ) {
+        if (toggleGroup.checkedButtonIds.contains(buttonId)) {
+            toggleGroup.uncheck(buttonId)
+        } else {
+            toggleGroup.check(buttonId)
+        }
+    }
+
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
         setValuesOnToggleGroup(values, entryValues, toggleGroup)
         toggleGroup.clearOnButtonCheckedListeners()

@@ -8,11 +8,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import androidx.core.content.res.TypedArrayUtils
+import androidx.core.view.get
 import androidx.preference.PreferenceViewHolder
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -138,8 +140,57 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         }
     }
 
+    private fun indexOfFocusedButton(toggleGroup: MaterialButtonToggleGroup): Int {
+        for (i in 0 ..< toggleGroup.childCount) {
+            val button = toggleGroup[i]
+            if (button.hasFocus()) {
+                return i
+            }
+        }
+
+        return -1
+    }
+
+    protected abstract fun handleButtonOnKeyInput(
+        toggleGroup: MaterialButtonToggleGroup,
+        buttonIndex: Int,
+        buttonId: Int
+    )
+
     final override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
+        val toggleGroup = holder.findViewById(R.id.toggle_group) as MaterialButtonToggleGroup
+        holder.itemView.setOnKeyListener { _, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN || toggleGroup.childCount == 0) {
+                return@setOnKeyListener false
+            }
+
+            when (keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    val index = indexOfFocusedButton(toggleGroup)
+                    if (index < 0) {
+                        toggleGroup[toggleGroup.childCount - 1].requestFocus()
+                        return@setOnKeyListener true // Prevent system from stepping to the next button.
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    val index = indexOfFocusedButton(toggleGroup)
+                    if (index < 0) {
+                        toggleGroup[0].requestFocus()
+                        return@setOnKeyListener true
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                    val index = indexOfFocusedButton(toggleGroup)
+                    if (index >= 0) {
+                        handleButtonOnKeyInput(toggleGroup, index, toggleGroup[index].id)
+                        return@setOnKeyListener true
+                    }
+                }
+            }
+
+            false
+        }
         with(holder.findViewById(R.id.toggle_group) as MaterialButtonToggleGroup) {
             isSingleSelection = isPreferenceSingleSelection
             setupButtonsOnToggleGroup(entries, entryValues, icons, this)

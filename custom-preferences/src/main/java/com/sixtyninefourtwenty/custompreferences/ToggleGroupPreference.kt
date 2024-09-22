@@ -100,22 +100,34 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
         }
     }
 
+    private fun handleInput(toggleGroup: MaterialButtonToggleGroup, buttonIndex: Int) {
+        val strEntryValue = entryValues[buttonIndex].toString()
+        if (callChangeListener(strEntryValue)) {
+            setValueInternal(strEntryValue, false)
+        } else {
+            val oldButtonIndex = value?.let { entryValues.indexOf(it) } ?: -1
+            if (oldButtonIndex >= 0) {
+                toggleGroup.check(toggleGroup[oldButtonIndex].id)
+            } else {
+                toggleGroup.clearChecked()
+            }
+        }
+    }
+
+    override fun handleButtonOnKeyInput(
+        toggleGroup: MaterialButtonToggleGroup,
+        buttonIndex: Int,
+        buttonId: Int
+    ) {
+        handleInput(toggleGroup, buttonIndex)
+    }
+
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
         val entryValues = this.entryValues
         setValueOnToggleGroup(value, entryValues, toggleGroup)
         toggleGroup.children.forEachIndexed { index, view ->
             view.setOnClickListener {
-                val strEntryValue = entryValues[index].toString()
-                if (callChangeListener(strEntryValue)) {
-                    setValueInternal(strEntryValue, false)
-                } else {
-                    val oldButtonIndex = value?.let { entryValues.indexOf(it) } ?: -1
-                    if (oldButtonIndex >= 0) {
-                        toggleGroup.check(toggleGroup[oldButtonIndex].id)
-                    } else {
-                        toggleGroup.clearChecked()
-                    }
-                }
+                handleInput(toggleGroup, index)
             }
         }
     }
