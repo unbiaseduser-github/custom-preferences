@@ -6,6 +6,7 @@ import android.content.res.TypedArray
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.KeyEvent
 import androidx.core.content.res.TypedArrayUtils
 import androidx.core.os.ParcelCompat
 import androidx.preference.PreferenceViewHolder
@@ -78,6 +79,8 @@ open class SliderPreference @JvmOverloads constructor(
             _isLabelVisible = value
             notifyChanged()
         }
+
+    private var isTrackingTouch = false
 
     /**
      * Sets multiple properties to this preference at once. This method is recommended over
@@ -155,15 +158,13 @@ open class SliderPreference @JvmOverloads constructor(
     }
 
     private val onSliderTouchListener = object : Slider.OnSliderTouchListener {
-        override fun onStartTrackingTouch(slider: Slider) = Unit
+        override fun onStartTrackingTouch(slider: Slider) {
+            isTrackingTouch = true
+        }
 
         override fun onStopTrackingTouch(slider: Slider) {
-            val newValue = slider.value
-            if (callChangeListener(newValue)) {
-                setValueInternal(newValue, false)
-            } else {
-                slider.value = this@SliderPreference.value
-            }
+            isTrackingTouch = false
+            handleNewSliderValue(slider, slider.value)
         }
     }
 
@@ -193,9 +194,41 @@ open class SliderPreference @JvmOverloads constructor(
         setTypedPreferenceChangeListener(block)
     }
 
+    private fun handleNewSliderValue(slider: Slider, value: Float) {
+        if (callChangeListener(value)) {
+            setValueInternal(value, false)
+        } else {
+            slider.value = this.value
+        }
+    }
+
+    /**
+     * Change listener exclusively for adjustments with key input.
+     */
+    private val onSliderChangeOnKeyInputListener = Slider.OnChangeListener { slider, value, fromUser ->
+        /*
+        Discard value change events while:
+        - user is dragging
+        - programmatically setting slider value (in handleNewSliderValue when callChangeListener returns false, or in onBindViewHolder)
+        */
+        if (isTrackingTouch || !fromUser) {
+            return@OnChangeListener
+        }
+
+        handleNewSliderValue(slider, value)
+    }
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        (holder.findViewById(R.id.slider) as Slider).also {
+        val slider = holder.findViewById(R.id.slider) as Slider
+        holder.itemView.setOnKeyListener { _, keyCode, event ->
+            if (event.action != KeyEvent.ACTION_DOWN) {
+                return@setOnKeyListener false
+            }
+
+            slider.onKeyDown(keyCode, event)
+        }
+        slider.also {
             it.valueFrom = valueFrom
             it.valueTo = valueTo
             it.stepSize = stepSize
@@ -204,6 +237,8 @@ open class SliderPreference @JvmOverloads constructor(
             it.value = value
             it.clearOnSliderTouchListeners()
             it.addOnSliderTouchListener(onSliderTouchListener)
+            it.clearOnChangeListeners()
+            it.addOnChangeListener(onSliderChangeOnKeyInputListener)
         }
     }
 
