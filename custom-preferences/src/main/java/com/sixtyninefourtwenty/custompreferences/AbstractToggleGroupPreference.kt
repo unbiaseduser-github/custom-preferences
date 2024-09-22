@@ -49,7 +49,8 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
 
     /**
      * Whether the preference can only have one value. Will be passed to
-     * [MaterialButtonToggleGroup.setSingleSelection] on [onBindViewHolder].
+     * [MaterialButtonToggleGroup.setSingleSelection] and [MaterialButtonToggleGroup.setSelectionRequired]
+     * on [onBindViewHolder].
      */
     protected abstract val isPreferenceSingleSelection: Boolean
 
@@ -193,6 +194,7 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         }
         with(holder.findViewById(R.id.toggle_group) as MaterialButtonToggleGroup) {
             isSingleSelection = isPreferenceSingleSelection
+            isSelectionRequired = isPreferenceSingleSelection
             setupButtonsOnToggleGroup(entries, entryValues, icons, this)
             bind(this)
         }
