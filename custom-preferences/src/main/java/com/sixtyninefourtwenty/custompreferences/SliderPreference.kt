@@ -40,6 +40,15 @@ open class SliderPreference @JvmOverloads constructor(
     defStyleRes: Int = R.style.Preference_SliderPreference
 ) : PreferenceCustomViewUnderneath(context, attrs, defStyleAttr, defStyleRes), CanSetPreferenceChangeListener<Float> {
 
+    /**
+     * Listener that's triggered when the preference's slider's value is changed by any means.
+     *
+     * Do **NOT** attempt to update this preference's UI if `fromUser` is `true`.
+     */
+    fun interface OnSliderValueChangeListener {
+        fun onSliderValueChanged(value: Float, fromUser: Boolean)
+    }
+
     private var _value: Float = DEFAULT_VALUE
     var value: Float
         get() = _value
@@ -81,6 +90,22 @@ open class SliderPreference @JvmOverloads constructor(
         }
 
     private var isTrackingTouch = false
+
+    private val onSliderValueChangeListeners = LinkedHashSet<OnSliderValueChangeListener>()
+
+    /**
+     * Adds a listener that will be called when the preference's slider's value is changed by any means.
+     */
+    fun addOnSliderValueChangeListener(listener: OnSliderValueChangeListener): Boolean {
+        return onSliderValueChangeListeners.add(listener)
+    }
+
+    /**
+     * Removes a listener previously added with [addOnSliderValueChangeListener].
+     */
+    fun removeOnSliderValueChangeListener(listener: OnSliderValueChangeListener): Boolean {
+        return onSliderValueChangeListeners.remove(listener)
+    }
 
     /**
      * Sets multiple properties to this preference at once. This method is recommended over
@@ -218,6 +243,10 @@ open class SliderPreference @JvmOverloads constructor(
         handleNewSliderValue(slider, value)
     }
 
+    private val universalOnSliderChangeListener = Slider.OnChangeListener { _, value, fromUser ->
+        onSliderValueChangeListeners.forEach { it.onSliderValueChanged(value, fromUser) }
+    }
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         val slider = holder.findViewById(R.id.slider) as Slider
@@ -238,6 +267,7 @@ open class SliderPreference @JvmOverloads constructor(
             it.clearOnSliderTouchListeners()
             it.addOnSliderTouchListener(onSliderTouchListener)
             it.clearOnChangeListeners()
+            it.addOnChangeListener(universalOnSliderChangeListener)
             it.addOnChangeListener(onSliderChangeOnKeyInputListener)
         }
     }
