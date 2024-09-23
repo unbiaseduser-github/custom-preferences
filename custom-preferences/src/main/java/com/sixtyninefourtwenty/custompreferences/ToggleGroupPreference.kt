@@ -111,14 +111,6 @@ open class ToggleGroupPreference : AbstractToggleGroupPreference, CanSetPreferen
         }
     }
 
-    override fun handleButtonOnKeyInput(
-        toggleGroup: MaterialButtonToggleGroup,
-        buttonIndex: Int,
-        buttonId: Int
-    ) {
-        handleInput(toggleGroup, buttonIndex)
-    }
-
     override fun bind(toggleGroup: MaterialButtonToggleGroup) {
         val entryValues = this.entryValues
         setValueOnToggleGroup(value, entryValues, toggleGroup)

@@ -152,12 +152,6 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         return -1
     }
 
-    protected abstract fun handleButtonOnKeyInput(
-        toggleGroup: MaterialButtonToggleGroup,
-        buttonIndex: Int,
-        buttonId: Int
-    )
-
     final override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         val toggleGroup = holder.findViewById(R.id.toggle_group) as MaterialButtonToggleGroup
@@ -178,13 +172,6 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
                     val index = indexOfFocusedButton(toggleGroup)
                     if (index < 0) {
                         toggleGroup[0].requestFocus()
-                        return@setOnKeyListener true
-                    }
-                }
-                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                    val index = indexOfFocusedButton(toggleGroup)
-                    if (index >= 0) {
-                        handleButtonOnKeyInput(toggleGroup, index, toggleGroup[index].id)
                         return@setOnKeyListener true
                     }
                 }
