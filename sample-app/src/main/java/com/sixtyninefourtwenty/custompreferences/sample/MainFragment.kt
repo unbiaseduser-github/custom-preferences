@@ -90,7 +90,8 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                 setProperties(
                     valueFrom = 0F,
                     valueTo = 10F,
-                    stepSize = 1F
+                    stepSize = 1F,
+                    sliderValueFunction = { it.toInt().toString() }
                 )
                 setOnPreferenceChange {
                     Toast.makeText(context, getString(R.string.value, it.toString()), Toast.LENGTH_SHORT).show()

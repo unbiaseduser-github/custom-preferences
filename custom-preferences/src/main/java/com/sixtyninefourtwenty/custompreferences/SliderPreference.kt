@@ -7,6 +7,8 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.View
+import android.widget.TextView
 import androidx.core.content.res.TypedArrayUtils
 import androidx.core.os.ParcelCompat
 import androidx.preference.PreferenceViewHolder
@@ -88,6 +90,18 @@ open class SliderPreference @JvmOverloads constructor(
             _isLabelVisible = value
             notifyChanged()
         }
+    private var _sliderValueFunction: ((Float) -> CharSequence)? = null
+
+    /**
+     * If non-null, the slider value will be displayed with the result of this function applied to
+     * this preference's slider's value. Else, the value is hidden.
+     */
+    var sliderValueFunction: ((Float) -> CharSequence)?
+        get() = _sliderValueFunction
+        set(value) {
+            _sliderValueFunction = value
+            notifyChanged()
+        }
 
     private var isTrackingTouch = false
 
@@ -119,7 +133,8 @@ open class SliderPreference @JvmOverloads constructor(
         valueTo: Float? = null,
         stepSize: Float? = null,
         isTickVisible: Boolean? = null,
-        isLabelVisible: Boolean? = null
+        isLabelVisible: Boolean? = null,
+        sliderValueFunction: ((Float) -> CharSequence)? = null
     ) {
         if (value != null) {
             setValueInternal(value, false)
@@ -139,6 +154,9 @@ open class SliderPreference @JvmOverloads constructor(
         if (isLabelVisible != null) {
             this._isLabelVisible = isLabelVisible
         }
+        if (sliderValueFunction != null) {
+            this._sliderValueFunction = sliderValueFunction
+        }
         notifyChanged()
     }
 
@@ -151,7 +169,8 @@ open class SliderPreference @JvmOverloads constructor(
         valueTo = properties.valueTo,
         stepSize = properties.stepSize,
         isTickVisible = properties.isTickVisible,
-        isLabelVisible = properties.isLabelVisible
+        isLabelVisible = properties.isLabelVisible,
+        sliderValueFunction = properties.sliderValueFunction
     )
 
     class Properties private constructor(
@@ -161,6 +180,7 @@ open class SliderPreference @JvmOverloads constructor(
         @JvmField internal val stepSize: Float?,
         @JvmField internal val isTickVisible: Boolean?,
         @JvmField internal val isLabelVisible: Boolean?,
+        @JvmField internal val sliderValueFunction: ((Float) -> CharSequence)?
     ) {
 
         class Builder {
@@ -170,6 +190,7 @@ open class SliderPreference @JvmOverloads constructor(
             private var stepSize: Float? = null
             private var isTickVisible: Boolean? = null
             private var isLabelVisible: Boolean? = null
+            private var sliderValueFunction: ((Float) -> CharSequence)? = null
 
             fun setValue(value: Float?) = apply { this.value = value }
             fun setValueFrom(valueFrom: Float?) = apply { this.valueFrom = valueFrom }
@@ -177,7 +198,8 @@ open class SliderPreference @JvmOverloads constructor(
             fun setStepSize(stepSize: Float?) = apply { this.stepSize = stepSize }
             fun setTickVisible(isTickVisible: Boolean?) = apply { this.isTickVisible = isTickVisible }
             fun setLabelVisible(isLabelVisible: Boolean?) = apply { this.isLabelVisible = isLabelVisible }
-            fun build() = Properties(value, valueFrom, valueTo, stepSize, isTickVisible, isLabelVisible)
+            fun setSliderValueFunction(sliderValueFunction: ((Float) -> CharSequence)?) = apply { this.sliderValueFunction = sliderValueFunction }
+            fun build() = Properties(value, valueFrom, valueTo, stepSize, isTickVisible, isLabelVisible, sliderValueFunction)
         }
 
     }
@@ -247,9 +269,20 @@ open class SliderPreference @JvmOverloads constructor(
         onSliderValueChangeListeners.forEach { it.onSliderValueChanged(value, fromUser) }
     }
 
+    private fun setValueToText(value: Float, textView: TextView) {
+        textView.text = sliderValueFunction?.invoke(value)
+    }
+
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         val slider = holder.findViewById(R.id.slider) as Slider
+        val textView = holder.findViewById(R.id.slider_value) as TextView
+        if (sliderValueFunction != null) {
+            textView.visibility = View.VISIBLE
+        } else {
+            textView.visibility = View.GONE
+        }
+        setValueToText(value, textView)
         holder.itemView.setOnKeyListener { _, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) {
                 return@setOnKeyListener false
@@ -268,6 +301,7 @@ open class SliderPreference @JvmOverloads constructor(
             it.addOnSliderTouchListener(onSliderTouchListener)
             it.clearOnChangeListeners()
             it.addOnChangeListener(universalOnSliderChangeListener)
+            it.addOnChangeListener { _, value, _ -> setValueToText(value, textView) }
             it.addOnChangeListener(onSliderChangeOnKeyInputListener)
         }
     }
