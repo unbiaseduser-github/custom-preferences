@@ -144,9 +144,15 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
     }
 
     override fun onSetInitialValue(defaultValue: Any?) {
-        val value = defaultValue as String?
-        color = getPersistedInt(if (value.isNullOrBlank()) Int.MIN_VALUE else value.toColorInt())
-            .takeIf { it != Int.MIN_VALUE }
+        when (defaultValue) {
+            is String? -> {
+                color = getPersistedInt(if (defaultValue.isNullOrBlank()) Int.MIN_VALUE else defaultValue!!.toColorInt())
+                    .takeIf { it != Int.MIN_VALUE }
+            }
+            is Int? -> {
+                color = getPersistedInt(defaultValue ?: Int.MIN_VALUE).takeIf { it != Int.MIN_VALUE }
+            }
+        }
     }
 
     override fun onSaveInstanceState(): Parcelable? {
