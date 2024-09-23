@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import androidx.annotation.ArrayRes
 import androidx.annotation.ColorInt
@@ -128,10 +129,13 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         with(holder.findViewById(R.id.color_picker_widget) as ImageView) {
-            val drawable = ContextCompat.getDrawable(context, R.drawable.colorpicker_pref_swatch)?.mutate()?.apply {
-                colorFilter = PorterDuffColorFilter(color ?: Color.TRANSPARENT, PorterDuff.Mode.SRC_OVER)
+            val drawable = color?.let {
+                ContextCompat.getDrawable(context, R.drawable.colorpicker_pref_swatch)?.mutate()?.apply {
+                    colorFilter = PorterDuffColorFilter(it, PorterDuff.Mode.SRC_OVER)
+                }
             }
             setImageDrawable(drawable)
+            visibility = if (drawable != null) View.VISIBLE else View.GONE
         }
     }
 
