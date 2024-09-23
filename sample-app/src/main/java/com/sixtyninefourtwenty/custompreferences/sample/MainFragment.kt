@@ -40,7 +40,6 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
             addPreference(ToggleGroupPreference(context).apply {
                 key = "tgp"
                 title = "Toggle group preference"
-                summaryProvider = ToggleGroupPreference.getSimpleSummaryProvider()
                 setEntries(
                     entries = listOf("one", "two", "three", "four"),
                     entryValues = listOf("One", "Two", "Three", "Four")
