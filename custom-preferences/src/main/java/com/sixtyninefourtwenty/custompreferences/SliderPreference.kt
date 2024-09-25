@@ -289,6 +289,7 @@ open class SliderPreference @JvmOverloads constructor(
             }
 
             slider.onKeyDown(keyCode, event)
+            false
         }
         slider.also {
             it.valueFrom = valueFrom
