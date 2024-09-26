@@ -21,7 +21,7 @@ fun <T> Preference.setTypedPreferenceChangeListener(block: ((T) -> Boolean)?) {
 }
 
 /**
- * Make [TimePickerPreference] and [PredefinedColorPickerPreference]'s dialog not break on configuration changes. Call this in
+ * Make [TimePickerPreference]'s dialog not break on configuration changes. Call this in
  * [PreferenceFragmentCompat.onCreatePreferences].
  *
  * **Limitation:** If your preference doesn't have a key, this method is essentially useless.
@@ -35,13 +35,4 @@ fun PreferenceFragmentCompat.installConfigurationChangePatch() {
             pref.handleNewlyPickedValue(LocalTime.of(existingDialogFragment.hour, existingDialogFragment.minute))
         }
     }
-    parentFragmentManager.reinstateFragmentListenersIfApplicable(
-        tag = TAG,
-        colorListener = { color, _ ->
-            val key = existingDialogFragment.requireArguments().getString("key") ?: return@reinstateFragmentListenersIfApplicable
-            val pref = findPreference<PredefinedColorPickerPreference>(key) ?: return@reinstateFragmentListenersIfApplicable
-            pref.handleNewlyPickedValue(color)
-        },
-        dismissListener = null
-    )
 }

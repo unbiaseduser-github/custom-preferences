@@ -22,6 +22,7 @@ import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialog
 import com.github.dhaval2404.colorpicker.MaterialColorPickerDialogFragment
+import com.sixtyninefourtwenty.custompreferences.fragment.PredefinedColorPickerPreferenceDialogFragment
 import com.sixtyninefourtwenty.custompreferences.internal.getAndroidXNotSetString
 import com.sixtyninefourtwenty.custompreferences.internal.throwValueNotSetException
 import java.util.Objects
@@ -113,11 +114,8 @@ open class PredefinedColorPickerPreference @JvmOverloads constructor(
                     it.setDefaultColor(prefColor)
                 }
             }
-            .setColorListener { color, _ ->
-                handleNewlyPickedValue(color)
-            }
             .build()
-            .createDialog()
+            .let { PredefinedColorPickerPreferenceDialogFragment(it) }
     }
 
     internal fun handleNewlyPickedValue(newColor: Int) {
