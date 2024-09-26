@@ -6,6 +6,7 @@
         <attr name="preferenceScrollableCustomViewUnderneathStyle" format="reference"/>
         <attr name="abstractToggleGroupPreferenceStyle" format="reference"/>
         <attr name="sliderPreferenceStyle" format="reference"/>
+        <attr name="blankPreferenceStyle" format="reference"/>
     </declare-styleable>
     <declare-styleable name="TimePickerPreference">
         <attr name="tpp_useSimpleSummaryProvider" format="boolean"/>
@@ -30,5 +31,8 @@
         <attr name="sp_stepSize" format="float"/>
         <attr name="sp_tickVisible" format="boolean"/>
         <attr name="sp_labelVisible" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="BlankPreference">
+        <attr name="bp_contentLayout" format="reference"/>
     </declare-styleable>
 </resources>

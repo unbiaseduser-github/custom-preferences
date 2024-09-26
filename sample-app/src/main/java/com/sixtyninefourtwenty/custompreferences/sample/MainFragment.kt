@@ -2,8 +2,9 @@ package com.sixtyninefourtwenty.custompreferences.sample
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
-import androidx.preference.Preference
+import com.sixtyninefourtwenty.custompreferences.BlankPreference
 import com.sixtyninefourtwenty.custompreferences.MultiSelectToggleGroupPreference
 import com.sixtyninefourtwenty.custompreferences.PredefinedColorPickerPreference
 import com.sixtyninefourtwenty.custompreferences.PreferenceFragmentCompatAccommodateCustomDialogPreferences
@@ -84,6 +85,11 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                     true
                 }
             })
+            addPreference(BlankPreference(context).apply {
+                key = "sp_value"
+                title = "Slider value"
+                setContentLayoutResource(R.layout.blank_preference_slider_value)
+            })
             addPreference(SliderPreference(context).apply {
                 key = "sp"
                 title = "Slider preference"
@@ -102,12 +108,8 @@ class MainFragment : PreferenceFragmentCompatAccommodateCustomDialogPreferences(
                 }
                 addOnSliderValueChangeListener { value, fromUser ->
                     Log.d(javaClass.simpleName, "Slider value: %d, fromUser: %b".format(value.toInt(), fromUser))
-                    findPreference<Preference>("sp_value")!!.summary = "Slider value: %d, fromUser: %b".format(value.toInt(), fromUser)
+                    findPreference<BlankPreference>("sp_value")!!.summary = "Slider value: %d, fromUser: %b".format(value.toInt(), fromUser)
                 }
-            })
-            addPreference(Preference(context).apply {
-                key = "sp_value"
-                title = "Slider value"
             })
         }
     }

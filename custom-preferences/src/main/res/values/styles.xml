@@ -19,4 +19,8 @@
     <style name="Preference.SliderPreference" parent="Preference.CustomViewUnderneath">
         <item name="android:widgetLayout">@layout/slider_preference_widget</item>
     </style>
+
+    <style name="Preference.BlankPreference" parent="Preference.Material">
+        <item name="android:layout">@layout/blank_preference</item>
+    </style>
 </resources>
