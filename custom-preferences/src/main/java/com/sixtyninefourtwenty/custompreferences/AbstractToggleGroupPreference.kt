@@ -95,6 +95,12 @@ abstract class AbstractToggleGroupPreference @JvmOverloads constructor(
         notifyChanged()
     }
 
+    fun setIcons(icons: List<Drawable?>?) {
+        checkEntries(this.entries, this.entryValues, icons)
+        this.icons = icons
+        notifyChanged()
+    }
+
     @Deprecated(message = "Use the version that takes lists.", replaceWith =
         ReplaceWith("setEntries(entries?.toList().orEmpty(), entryValues?.toList().orEmpty(), icons?.toList())")
     )
